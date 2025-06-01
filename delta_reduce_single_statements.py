@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 import re
 from pathlib import Path
@@ -21,24 +22,26 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
         key=lambda f: int(re.search(r"query_(\d+)\.sql", f.name).group(1))
     )
 
-    for i, curr_path in enumerate(query_files):
-        print(f"pre_next_sql: {pre_next_sql}")
+    for i, curr_path in reversed(list(enumerate(query_files))):
+        print(f"post_next_sql: {post_next_sql}")
 
         next_sql = curr_path.read_text(encoding='utf-8')
 
         # Collect post_next_sql from all later files
-        post_next_sql = ""
-        for later_path in query_files[i + 1:]:
-            post_next_sql += later_path.read_text(encoding='utf-8')
+        pre_next_sql = ""
+        for later_path in query_files[:i:-1]:
+            pre_next_sql = later_path.read_text(encoding='utf-8') + pre_next_sql
 
-        print(f"post_next_sql: {post_next_sql}")
+        print(f"pre_next_sql: {post_next_sql}")
         
         #try to reduce the sql
         new_sql = reduce(next_sql, 2, "test_script", pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
 
         print(f"Reduced query: {new_sql}")
 
-        pre_next_sql += '\n' + reduced_sql
+
+        post_next_sql = reduced_sql + '\n' + post_next_sql
+        #pre_next_sql += '\n' + reduced_sql
     return "success"
 
 #def reduce_sql(expected_output_326: str, expected_output_339: str, pre_next_sql: str, post_next_sql: str, curr_sql_line: str) -> str:
@@ -135,7 +138,6 @@ def split_token_aware(curr_sql_line: str, n: int) -> List[str]:
         parts.append(part.strip())
     return parts
 
-
 def comps_of_split(parts: List[str]) -> List[str]:
     comps = []
     for i in range(len(parts)):
@@ -150,15 +152,22 @@ def test_for_fail(sql_query: str, test_script: str,
                   pre_next_sql: str, post_next_sql: str, 
                   expected1: str | None, expected2: str | None) -> int:
     curr_query = pre_next_sql + sql_query + post_next_sql
-    print("CURR SQL")
-    print(curr_query)
-    new_sql_query_output = run_sqlite("3.26.0", curr_query)
-    og_sql_query_output = run_sqlite("3.39.4", curr_query)
-    print(new_sql_query_output)
-    print(og_sql_query_output)
-    if(new_sql_query_output != og_sql_query_output):
-        return 0
-    return 1
+    try:
+        result = subprocess.run(
+            [test_script, curr_query],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return int(result.stdout.strip())
+    except subprocess.CalledProcessError as e:
+        print(f"Script failed with return code {e.returncode}")
+        print(f"stderr: {e.stderr}")
+        raise
+    except ValueError as e:
+        print("Failed to convert output to int")
+        print(f"Output was: {result.stdout}")
+        raise
     
     
     
