@@ -1,1 +1,4 @@
-CREATE TABLE F(p NOT NULL,N);INSERT INTO F SELECT*FROM(VALUES((false),false),(NULL,(NOT(true))))WHERE(((((((0)/((((7*(1*(7)))+(6))))))))=((((((4/(((9)*(8))))))*((((3)/((9))))))*(0))*(((((((4))))*(4))))))=(false<(8)))
+
+CREATE TABLE F (p NOT NULL, N);
+
+INSERT INTO F SELECT * FROM (VALUES ((NOT false), false), (NULL, (NOT (NOT true)))) AS L WHERE (((+(+(-((+110) / (+((-(-150)) * ((247 * (91 * (-47))) + (-86)))))))) = ((((+(+(24 / (+((+89) * (+58)))))) * (-(-((193 + 223) / (-(222 / 219)))))) * (34 * 70)) * (+(+((((+(+(-202))) / (+52)) - (-(228 + (-104)))) * (-24)))))) = (false <> (66 <> 8)));

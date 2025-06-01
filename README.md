@@ -5,6 +5,7 @@ It should be mentioned that these instructions have worked on a Linux environmen
 
 First pull theosotr/sqlite3-test from the docker (as stated in the project description), this is specifically needed so that we have access to the two older versions, sqlite3-3.26.0 and sqlite3-3.39.4:
 
+sudo service docker start
 sudo docker pull theosotr/sqlite3-test
 sudo docker run -it theosotr/sqlite3-test
 
