@@ -17,3 +17,13 @@ Then to run reducer.sh inside the docker container on --query and --test you can
 
 sudo docker run --rm   -v "$(pwd)/queries-to-minimize:/usr/bin/queries-to-minimize"   docker_image   ./reducer --query /usr/bin/queries-to-minimize/queries/query1/original_test.sql --test /usr/bin/test
 
+If you wanna run all of them back to back, you can do this:
+
+for i in {1..20}; do
+  sudo docker run --rm \
+    -v "$(pwd)/queries-to-minimize:/usr/bin/queries-to-minimize" \
+    docker_image \
+    ./reducer --query /usr/bin/queries-to-minimize/queries/query$i/original_test.sql \
+              --test /usr/bin/test
+done
+

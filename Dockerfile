@@ -13,11 +13,14 @@ RUN sudo apt-get update && \
     lcov \
     build-essential \
     tcl \
+    python3 \
+    default-jre \
+    openjdk-21-jre \
     && sudo rm -rf /var/lib/apt/lists/*
     
     
-RUN sudo apt update && sudo apt install -y default-jre
-RUN sudo apt update && sudo apt install -y openjdk-21-jre
+#RUN sudo apt update && sudo apt install -y default-jre
+#RUN sudo apt update && sudo apt install -y openjdk-21-jre
 
 # Copy run_queries.sh
 COPY test.sh test
@@ -34,11 +37,13 @@ COPY reducer_helper.java .
 # COPY reducer_helper.class
 COPY reducer_helper.class .
 
+# COPY get_sql_statements.py
+COPY get_sql_statements.py .
+
 RUN sudo chmod +x test
 RUN sudo chmod +x reducer
 RUN sudo chmod +x reducer_helper.class
-
-
+RUN sudo chmod +x get_sql_statements.py
 
 
 # Set the default command (you can change this based on your testing)
