@@ -18,48 +18,21 @@ public class reducer_helper {
         Path sql_query_path = Paths.get(args[0]);
         System.out.println("SQL Query path: " + sql_query_path.toAbsolutePath());
 
-        Path oracle_path = sql_query_path.getParent().resolve("oracle.txt");
-        System.out.println("Oracle path: " + oracle_path.toAbsolutePath());
+        /*Path oracle_path = sql_query_path.getParent().resolve("oracle.txt");
+        System.out.println("Oracle path: " + oracle_path.toAbsolutePath());*/
 
         // we get the path to the testscript folder where our original_test.sql is
         String test = args[1];
 
         // we get the path to the query folder to get to oracle.txt
-        String original_test = Files.readString(sql_query_path);
+        /*String original_test = Files.readString(sql_query_path);
         String oracle = Files.readString(oracle_path);
-
-
-        // Precompute expected output(s), so we don't have to compute the error for the original_test again and again and again...
-        Path expected1 = null;
-        Path expected2 = null;
-
-        if (oracle.contains("CRASH")) {
-
-            String version = oracle.replaceAll("CRASH\\((.*?)\\)", "$1").trim();
-            System.out.println("version: " + version);
-            String crashOutput = run_sqlite(version, original_test);
-            expected1 = Files.createTempFile("expected_crash", ".txt");
-            Files.write(expected1, crashOutput.getBytes(StandardCharsets.UTF_8));
-
-        }
-
-        if (oracle.contains("DIFF")) {
-            String out326 = run_sqlite("3.26.0", original_test);
-            String out339 = run_sqlite("3.39.4", original_test);
-
-            expected1 = Files.createTempFile("expected_326", ".txt");
-            expected2 = Files.createTempFile("expected_339", ".txt");
-
-            Files.write(expected1, out326.getBytes(StandardCharsets.UTF_8));
-            Files.write(expected2, out339.getBytes(StandardCharsets.UTF_8));
-        }
-
 
         // Create reusable temp files for oracle and original test
         Path oracleTempPath = Files.createTempFile("oracle", ".txt");
         Files.write(oracleTempPath, oracle.getBytes(StandardCharsets.UTF_8));
         Path originalTestTempPath = Files.createTempFile("original_test", ".sql");
-        Files.write(originalTestTempPath, original_test.getBytes(StandardCharsets.UTF_8));
+        Files.write(originalTestTempPath, original_test.getBytes(StandardCharsets.UTF_8));*/
 
         // Read and reduce SQL query parts from sql_queries/query_i.sql
         Path sql_queries = sql_query_path.getParent().resolve("sql_queries");
@@ -119,7 +92,8 @@ public class reducer_helper {
 
         String save_reduced_curr_sql = "";
 
-        for (int i = 1; i <= order; i++) {
+        System.out.println(order);
+        for (int i = order; i >= 1; i--) {
 
             // Build pre_next_sql: we attach to pre_next_sql the reduced sql from the query before
             //System.out.println("pre_next_sql: " + pre_next_sql);
@@ -130,45 +104,45 @@ public class reducer_helper {
             // read next sql query
             String next_sql = Files.readString(next_sql_path);
 
-            // Build post_next_sql: query_(i+1) to query_(order)
-            for (int j = i+1; j <= order; j++) {
+            // Build pre_next_sql: query_(i+1) to query_(order)
+            for (int j = 1; j < i; j++) {
                 Path path = sql_query_path.getParent().resolve("sql_queries/query_" + j + ".sql");
-                post_next_sql = post_next_sql + Files.readString(path);
+                pre_next_sql = pre_next_sql + Files.readString(path);
             }
 
             //System.out.println("post_next_sql: " + post_next_sql);
 
             // If completely excluding the next_sql query actually gives us the same exit code as including it (resp. there still exists a failure), we can just reduce to the empty string (we do not need it to preserve the error)
             // we can do this to simply speed up the reduce process
-            if(test_for_fail("", test, oracleTempPath.toString(), originalTestTempPath.toString(), pre_next_sql, post_next_sql, expected1, expected2) == 0){
+            if(test_for_fail("", test, pre_next_sql, post_next_sql) == 0){
                 reduced_sql = "";
             }
             else{
-                reduced_sql = reduce(next_sql, 2, test, oracleTempPath.toString(), originalTestTempPath.toString(), pre_next_sql, post_next_sql, expected1, expected2);
+                reduced_sql = reduce(next_sql, 2, test, pre_next_sql, post_next_sql);
             }
 
             System.out.println("Reduced query: " + reduced_sql);
 
             // Build pre_next_sql: we attach to pre_next_sql the reduced sql from the query before
-            pre_next_sql = pre_next_sql + reduced_sql;
+            pre_next_sql = "";
 
             // we set post_next_sql again to the empty string
-            post_next_sql = "";
+            post_next_sql = reduced_sql + post_next_sql;
         }
 
         // since pre_next_sql actually also contains all our reduced sqls we have our reduced.sql
-        System.out.println("Reduced original_test: " + pre_next_sql);
+        System.out.println("Reduced original_test: " + post_next_sql);
         Path reduced_path = sql_query_path.getParent().resolve("reduced.sql");
-        Files.write(reduced_path, pre_next_sql.getBytes(StandardCharsets.UTF_8));
+        Files.write(reduced_path, post_next_sql.getBytes(StandardCharsets.UTF_8));
         System.out.println("Reduced query written to: " + reduced_path);
 
         // Cleanup temp files
-        Files.deleteIfExists(oracleTempPath);
-        Files.deleteIfExists(originalTestTempPath);
+        //Files.deleteIfExists(oracleTempPath);
+        //Files.deleteIfExists(originalTestTempPath);
     }
 
 
-    private static String reduce(String curr_sql_line, int n, String testScript, String oracle_path, String original_test_path, String pre_next_sql, String post_next_sql, Path expected1, Path expected2) throws IOException, InterruptedException {
+    private static String reduce(String curr_sql_line, int n, String testScript, String pre_next_sql, String post_next_sql) throws IOException, InterruptedException {
 	    
         if (curr_sql_line.length()==0){ 
 	    	return curr_sql_line;
@@ -187,14 +161,14 @@ public class reducer_helper {
 
         for (int i = 0; i < n; i++) {
             // if there is a failure when taking delta_i as reduced sql query then....
-            if (test_for_fail(parts.get(i), testScript, oracle_path, original_test_path, pre_next_sql, post_next_sql, expected1, expected2) == 0) {
+            if (test_for_fail(parts.get(i), testScript, pre_next_sql, post_next_sql) == 0) {
                 // call reduce with said delta and n = 2 
-                return reduce(parts.get(i), 2, testScript, oracle_path, original_test_path, pre_next_sql, post_next_sql, expected1, expected2);
+                return reduce(parts.get(i), 2, testScript, pre_next_sql, post_next_sql);
             }
             // if there is a failure when taking the complement of delta_i as reduced sql query then....
-            if (test_for_fail(comps.get(i), testScript, oracle_path, original_test_path, pre_next_sql, post_next_sql, expected1, expected2) == 0) {
+            if (test_for_fail(comps.get(i), testScript, pre_next_sql, post_next_sql) == 0) {
                 // call reduce with said complement of delta and n = n -1
-                return reduce(comps.get(i), n - 1, testScript, oracle_path, original_test_path, pre_next_sql, post_next_sql, expected1, expected2);
+                return reduce(comps.get(i), n - 1, testScript, pre_next_sql, post_next_sql);
             }
         }
 
@@ -204,7 +178,7 @@ public class reducer_helper {
         //} 
         //else{
         // if there is still "reduction potential" we just adapt the value n, we multiply it by a factor of 2 (as described in the algo as well)
-        return reduce(curr_sql_line, n * 2, testScript, oracle_path, original_test_path, pre_next_sql, post_next_sql, expected1, expected2);
+        return reduce(curr_sql_line, n * 2, testScript, pre_next_sql, post_next_sql);
         //}
 
     }
@@ -248,7 +222,7 @@ public class reducer_helper {
     }
 
     //private static int test_for_fail(String sql_query, String testScript, String oracle, String original_test_sql) throws IOException, InterruptedException {
-    private static int test_for_fail(String sql_query, String testScript, String oracle_path, String original_test_path, String pre_next_sql, String post_next_sql, Path expected1, Path expected2) throws IOException, InterruptedException {
+    private static int test_for_fail(String sql_query, String testScript, String pre_next_sql, String post_next_sql) throws IOException, InterruptedException {
         // creates temporary query file
         Path tmpQuery = Files.createTempFile("tmp_query", ".sql");
 
@@ -257,7 +231,7 @@ public class reducer_helper {
         Files.write(tmpQuery, temp_reduced.getBytes(StandardCharsets.UTF_8));
 
         //ProcessBuilder pb = new ProcessBuilder(testScript, tmpQuery.toString(), oracle_path, original_test_path);
-        ProcessBuilder pb = new ProcessBuilder(testScript, tmpQuery.toString(), oracle_path, original_test_path, expected1 != null ? expected1.toString() : "NULL", expected2 != null ? expected2.toString() : "NULL");
+        ProcessBuilder pb = new ProcessBuilder(testScript, tmpQuery.toString());
 
         pb.redirectErrorStream(true);
         Process proc = pb.start();
@@ -280,6 +254,7 @@ public class reducer_helper {
         return result;
     }
 
+    /*
     private static String run_sqlite(String version, String sqlContent) throws IOException, InterruptedException {
         Path tmpSql = Files.createTempFile("run_sqlite", ".sql");
         Files.write(tmpSql, sqlContent.getBytes(StandardCharsets.UTF_8));
@@ -307,7 +282,7 @@ public class reducer_helper {
 
         // include exit code in output marker for CRASH detection
         return "[EXIT CODE:" + exitCode + "]\n" + output.toString();
-    }
+    }*/
 
 
 }

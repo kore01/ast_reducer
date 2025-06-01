@@ -31,6 +31,9 @@ COPY reducer.sh reducer
 # Copy queries-to-minimize
 COPY queries-to-minimize queries-to-minimize
 
+# Copy scripts
+COPY scripts scripts
+
 # COPY reducer_helper.java
 COPY reducer_helper.java .
 
@@ -44,6 +47,8 @@ RUN sudo chmod +x test
 RUN sudo chmod +x reducer
 RUN sudo chmod +x reducer_helper.class
 RUN sudo chmod +x get_sql_statements.py
+
+RUN sudo chmod -R +x scripts
 
 
 # Set the default command (you can change this based on your testing)
