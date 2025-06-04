@@ -16,5 +16,8 @@ sudo docker build -t docker_image .
 
 Then to run reducer.sh inside the docker container on --query and --test you can use a command like this e.g.:
 
-sudo docker run --rm   -v "$(pwd)/queries-to-minimize:/usr/bin/queries-to-minimize"   docker_image   ./reducer --query /usr/bin/queries-to-minimize/queries/query1/original_test.sql --test /usr/bin/test
+sudo docker run --rm   -v "$(pwd)/queries-to-minimize:/usr/bin/queries-to-minimize"   docker_image   ./reducer --query /usr/bin/queries-to-minimize/queries/query1/original_test.sql --test /usr/bin/test_eq
+
+For running in the container:
+ docker run -it docker_image /bin/bash
 

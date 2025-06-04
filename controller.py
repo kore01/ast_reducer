@@ -1,3 +1,4 @@
+import shutil
 import sys
 import os
 from pathlib import Path
@@ -6,8 +7,13 @@ from get_sql_statements import get_sql_statements
 from run_sqlite import run_sqlite
 
 
-
+#take the OG path and change it to a copy
 query_path = os.path.realpath(sys.argv[1])
+
+dest_path = os.path.join(os.path.dirname(query_path), "result_query.sql")
+shutil.copyfile(query_path, dest_path)
+
+query_path = dest_path
 test_path = os.path.realpath(sys.argv[2])
 print(f"Reading: {query_path}")
 
@@ -33,10 +39,23 @@ print(f"The expected_output_326 is:  {expected_output_326}")
 
 #try to do funcy filtering 
 
+#attempt_all_statements = delta_reduce_many_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
 #try to delta reduce on all the statements
 
-#try to delta reduce single statements
-attempt = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-print(attempt)
+expected_output_339 = run_sqlite("3.39.4", ";CREATE TABLE F( p BOOLEAN NOT NULL NULL NOT NULL, i BOOLEAN) ;INSERT INTO F SELECT * FROM (VALUES ((NOT false), false), (NULL, (NOT (NOT true)))) AS L WHERE (((+(+(-((+110) / (+((-(-150)) * ((247 * (91 * (-47))) + (-86)))))))) = ((((+(+(24 / (+((+89) * (+58)))))) * (-(-((193 + 223) / (-(222 / 219)))))) * (34 * 70)) * (+(+((((+(+(-202))) / (+52)) - (-(228 + (-104)))) * (-24)))))) = (false <> (66 <> 8)));")
 
-#tokenization?
+#WHAT WE WANT TO DO HERE:
+#1. try to remove statements with delta (todo)
+#2. try to improve the statements (todo)
+# - tokenization
+# - try to cut off wheres/join/..../useless brackets
+#3. try to reduce the single statement with delta (done)
+#repeat while the steps improve the result
+
+attempt = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+while(attempt != content):
+    content = attempt
+    attempt = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+    print(attempt)
+    
+

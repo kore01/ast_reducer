@@ -23,7 +23,7 @@ RUN sudo apt-get update && \
 #RUN sudo apt update && sudo apt install -y openjdk-21-jre
 
 # Copy run_queries.sh
-COPY test.sh test
+COPY test.sh test_eq
 
 # Copy reducer
 COPY reducer.sh reducer
@@ -46,9 +46,9 @@ COPY delta_reduce_single_statements.py .
 
 COPY run_sqlite.py .
 
-RUN sudo chmod +x test
+RUN sudo chmod +x test_eq
 RUN sudo chmod +x reducer
-RUN sudo chmod +x reducer_helper.class
+#RUN sudo chmod +x reducer_helper.class
 RUN sudo chmod +x get_sql_statements.py
 
 
