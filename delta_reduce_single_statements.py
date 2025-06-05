@@ -6,6 +6,7 @@ import re
 from pathlib import Path
 from typing import List
 
+from remove_redundant_parentheses import remove_redundant_parentheses
 from run_sqlite import run_sqlite
 
 def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
@@ -43,6 +44,7 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
 
         #try to reduce the sql
         new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
+        new_sql = remove_redundant_parentheses(new_sql)
         curr_path.write_text(new_sql+";")
 
         print(f"Reduced query: {new_sql}")

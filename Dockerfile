@@ -14,8 +14,6 @@ RUN sudo apt-get update && \
     build-essential \
     tcl \
     python3 \
-    default-jre \
-    openjdk-21-jre \
     && sudo rm -rf /var/lib/apt/lists/*
 
 
@@ -32,17 +30,13 @@ COPY reducer.sh reducer
 COPY queries-to-minimize queries-to-minimize
 
 # COPY reducer_helper.java
-COPY reducer_helper.java .
-
-# COPY reducer_helper.java
 COPY controller.py .
 
-# COPY reducer_helper.class
-COPY reducer_helper.class .
 
 # COPY get_sql_statements.py
 COPY get_sql_statements.py .
 COPY delta_reduce_single_statements.py .
+COPY remove_redundant_parentheses.py .
 
 COPY run_sqlite.py .
 

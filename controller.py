@@ -4,6 +4,9 @@ import os
 from pathlib import Path
 from delta_reduce_single_statements import delta_reduce_single_statements
 from get_sql_statements import get_sql_statements
+
+
+from remove_redundant_parentheses import remove_redundant_parentheses
 from run_sqlite import run_sqlite
 
 
@@ -58,4 +61,5 @@ while(attempt != content):
     attempt = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
     print(attempt)
     
+
 
