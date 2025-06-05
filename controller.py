@@ -51,7 +51,7 @@ expected_output_339 = run_sqlite("3.39.4", ";CREATE TABLE F( p BOOLEAN NOT NULL 
 #1. try to remove statements with delta (todo)
 #2. try to improve the statements (todo)
 # - tokenization
-# - try to cut off wheres/join/..../useless brackets
+# - try to cut off wheres/join/....
 #3. try to reduce the single statement with delta (done)
 #repeat while the steps improve the result
 
@@ -60,6 +60,8 @@ while(attempt != content):
     content = attempt
     attempt = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
     print(attempt)
-    
 
+print(query_path)
+with open(query_path, "w", encoding="utf-8") as f:
+    f.write(content)
 
