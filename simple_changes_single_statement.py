@@ -8,16 +8,17 @@ from typing import List
 
 import tempfile
 
+from delta_reduce_single_statements import test_for_fail
 from remove_redundant_parentheses import remove_redundant_parentheses
-from run_sqlite import run_sqlite
 
-def simple_changes_single_statements(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
+
+def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
     curr_sql = ""
     reduced_sql = ""
     pre_next_sql = ""
     post_next_sql = ""
     save_reduced_curr_sql = ""
-    print("RUNNING SINGLE STATEMENTS DELTA")
+    print("RUNNING SINGLE STATEMENTS SQLBLOP")
 
     # Find all matching query_*.sql files
     sql_dir = sql_queries_dir
@@ -36,7 +37,9 @@ def simple_changes_single_statements(sql_queries_dir: Path, expected_output_326:
     for i, curr_path in reversed(list(enumerate(query_files))):
 
         next_sql = curr_path.read_text(encoding='utf-8')
+        
         print(f"curr_sql: {next_sql}")
+
 
         # Collect post_next_sql from all later files
         pre_next_sql = ""
@@ -51,9 +54,15 @@ def simple_changes_single_statements(sql_queries_dir: Path, expected_output_326:
             post_next_sql = new_sql + post_next_sql
             if not post_next_sql.endswith(";"):
                 post_next_sql = post_next_sql + ";"
+                
+            if os.path.isfile(curr_path):
+                os.remove(curr_path)
+            print(curr_path)
             print(f"reduced to empty: {new_sql}")
+            #curr_path.write_text("")
         else:
-            new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
+            new_sql = reduce_where(next_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
+            #new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
             new_sql = remove_redundant_parentheses(new_sql)
             if new_sql.strip().endswith(";"):
                 post_next_sql = new_sql + post_next_sql
@@ -64,121 +73,35 @@ def simple_changes_single_statements(sql_queries_dir: Path, expected_output_326:
 
             print(f"post_next_sql: {post_next_sql}")
 
+            #print(f"new_sql: {new_sql}")
+            curr_path.write_text(new_sql)
+
+        #print(f"post_next_sql: {post_next_sql}")
+
+        #if next_sql.strip().endswith(";"):
+        #    if(new_sql == ""):
+        #    post_next_sql = new_sql + post_next_sql
+        #else:
+        #    post_next_sql = new_sql + post_next_sql
+        #pre_next_sql += '\n' + reduced_sql
+    
+    #print(post_next_sql)
+    #print(f"Reduced query: {post_next_sql}")
     return post_next_sql
 
 #def reduce_sql(expected_output_326: str, expected_output_339: str, pre_next_sql: str, post_next_sql: str, curr_sql_line: str) -> str:
-def reduce(curr_sql_line:str, n: int, test_script: Path,
+def reduce_where(curr_sql_line:str, test_script: Path,
            pre_next_sql: str,  post_next_sql: str,
-           expected1: str, expected2: str, depth: int) -> str:
+           expected1: str, expected2: str) -> str:
 
     if len(curr_sql_line) == 0:
         return curr_sql_line
-
-    if n >= len(curr_sql_line):
+    
+    if test_for_fail(curr_sql_line, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
         return curr_sql_line
-
-    parts = split_token_aware(curr_sql_line, n)
-    comps = comps_of_split(parts)
-    #print(parts)
-    #print(comps)
-
-    for i in range(len(parts)):
-        delta = parts[i]
-        comp = comps[i]
-
-        if test_for_fail(delta, test_script, pre_next_sql, post_next_sql,expected1, expected2) == 0:
-            if(depth > 46): return delta
-            #return delta
-            #print("FAIL 1")
-            return reduce(delta, 2, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
-
-        if test_for_fail(comp, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
-            if(depth > 46): return comp
-            return reduce(comp, n - 1, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
-    #print("FAIL 3")
-    #if(depth > 6): return curr_sql_line
-    return reduce(curr_sql_line, n * 2, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
-
-
-def tokenize(sql: str) -> List[str]:
-    """
-    Simple SQL tokenizer: splits by whitespace and keeps punctuation separate.
-    """
-    # This regex splits words and punctuation into tokens
-    tokens = re.findall(r"\w+|[^\s\w]", sql)
-    tokens = [tok for tok in tokens if tok != ';' and tok != '']
-    return tokens
-
-def split_token_aware(curr_sql_line: str, n: int) -> List[str]:
-    tokens = tokenize(curr_sql_line)
-    length = len(tokens)
-    chunk_size = length // n
-    parts = []
-    for i in range(n):
-        start = i * chunk_size
-        if i == n - 1:
-            end = length
-        else:
-            end = (i + 1) * chunk_size
-        chunk_tokens = tokens[start:end]
-        # Join tokens with spaces except around punctuation
-        part = ""
-        for t in chunk_tokens:
-            if re.match(r"\w+", t):
-                # alphanumeric token
-                if part and not part.endswith(" "):
-                    part += " "
-                part += t
-            else:
-                # punctuation, append directly
-                part += t
-        if(part.strip()): parts.append(part.strip())
-    #print("PARTS")
-    #print(parts)
-    return parts
-
-def comps_of_split(parts: List[str]) -> List[str]:
-    return [" ".join(parts[:i] + parts[i+1:]) for i in range(len(parts))]
-
-@lru_cache(maxsize=14124)
-def test_for_fail(sql_query: str, test_script: Path,
-                  pre_next_sql: str, post_next_sql: str, 
-                  expected1: str | None, expected2: str | None) -> int:
-    if(sql_query == ""):
-        curr_query = pre_next_sql + post_next_sql
-    elif(sql_query.endswith(";")):
-        curr_query = pre_next_sql + sql_query + post_next_sql
     else:
-        curr_query = pre_next_sql + sql_query +";" + post_next_sql
-    #print(" TRY :")
-    #print(curr_query)
+        return curr_sql_line        
 
-    try:
-        with tempfile.NamedTemporaryFile(mode="w+", suffix=".sql", delete=False) as tmp_file:
-            #tmp_file.write(curr_query)
-            tmp_file.write(curr_query)
-            tmp_file.flush()
-            tmp_path = Path(tmp_file.name)
+   
 
-            # Use tmp_path in your subprocess
-            result = subprocess.run(
-                [str(test_script), str(tmp_path)],
-                capture_output=True,
-                text=True,
-                check=False
-            )
 
-            tmp_path.unlink()
-        
-        return result.returncode
-    except subprocess.CalledProcessError as e:
-        print(f"Script failed with return code {e.returncode}")
-        print(f"stderr: {e.stderr}")
-        raise
-    except ValueError as e:
-        print("Failed to convert output to int")
-        print(f"Output was: {result.stdout}")
-        raise
-    
-    
-    

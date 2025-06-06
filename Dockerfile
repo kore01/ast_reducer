@@ -41,6 +41,7 @@ COPY run_sqlite.py run_sqlite
 COPY get_sql_statements.py .
 COPY delta_reduce_single_statements.py .
 COPY remove_redundant_parentheses.py .
+COPY simple_changes_single_statement.py .
 
 COPY run_sqlite.py .
 
