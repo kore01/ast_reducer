@@ -172,18 +172,24 @@ def test_for_fail(sql_query: str, test_script: Path,
         curr_query = pre_next_sql + post_next_sql
     elif(sql_query.endswith(";")):
         curr_query = pre_next_sql + sql_query + post_next_sql
+        try:
+            parsed = sqlglot.parse_one(curr_query)
+            # If no exception: SQL is valid!
+        except (TokenError, ParseError) as e:
+            print(f"Invalid SQL detected: {curr_query} -- {e}")
+            # You can handle the error here (skip it, log it, count it, etc.)
+            return 1
     else:
         curr_query = pre_next_sql + sql_query +";" + post_next_sql
+        try:
+            parsed = sqlglot.parse_one(curr_query)
+            # If no exception: SQL is valid!
+        except (TokenError, ParseError) as e:
+            print(f"Invalid SQL detected: {curr_query} -- {e}")
+            # You can handle the error here (skip it, log it, count it, etc.)
+            return 1
     #print(" TRY :")
     #print(curr_query)
-
-    try:
-        parsed = sqlglot.parse_one(curr_query)
-        # If no exception: SQL is valid!
-    except (TokenError, ParseError) as e:
-        print(f"Invalid SQL detected: {curr_query} -- {e}")
-        # You can handle the error here (skip it, log it, count it, etc.)
-        return 1
 
     try:
         with tempfile.NamedTemporaryFile(mode="w+", suffix=".sql", delete=False) as tmp_file:
