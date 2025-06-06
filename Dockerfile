@@ -14,11 +14,13 @@ RUN sudo apt-get update && \
     build-essential \
     tcl \
     python3 \
+    python3-pip \
     && sudo rm -rf /var/lib/apt/lists/*
 
 
 #RUN sudo apt update && sudo apt install -y default-jre
 #RUN sudo apt update && sudo apt install -y openjdk-21-jre
+RUN sudo pip3 install sqlglot
 
 # Copy run_queries.sh
 COPY test.sh test_eq

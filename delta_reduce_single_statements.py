@@ -6,6 +6,9 @@ import re
 from pathlib import Path
 from typing import List
 
+import sqlglot
+from sqlglot.errors import ParseError
+
 import tempfile
 
 from remove_redundant_parentheses import remove_redundant_parentheses
@@ -173,6 +176,14 @@ def test_for_fail(sql_query: str, test_script: Path,
         curr_query = pre_next_sql + sql_query +";" + post_next_sql
     #print(" TRY :")
     #print(curr_query)
+
+    try:
+        #print(f"SQL_query_to_test: {curr_query}")
+        parsed = sqlglot.parse_one(curr_query)
+        #print("SQL is valid!")
+    except ParseError as e:
+        #print(f"Syntax error: {e}")
+        return 1
 
     try:
         with tempfile.NamedTemporaryFile(mode="w+", suffix=".sql", delete=False) as tmp_file:
