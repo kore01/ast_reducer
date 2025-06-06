@@ -1,5 +1,7 @@
 import os
 import sys
+import re
+
 
 from pathlib import Path
 
@@ -10,8 +12,9 @@ def get_sql_statements(input_path):
     with input_path.open("r", encoding="utf-8") as f:
         content = f.read()
 
-    # Split queries by semicolon, strip whitespace, and discard empties
-    queries = [q.strip() for q in content.split(";") if q.strip()]
+    # Split on ";" followed by space or newline:
+    queries = [q.strip() for q in re.split(r';(?=\s|\n)', content) if q.strip()]
+
 
     # Create output directory under the parent of the input file
     output_dir = input_path.parent / "sql_queries"
