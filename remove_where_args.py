@@ -1,68 +1,61 @@
 import sqlglot
 from sqlglot import parse_one, exp
 
-sql = """SELECT CASE WHEN subq1. c13> subq1. c13 THEN c13 END, subq1. c13, CAST( subq1. c13 AS TEXT), subq1. c13 
-FROM( 
-    SELECT FALSE c13 
-    FROM( 
-        SELECT c2 c9, t1. c5 c11, t1. c1 
-        FROM t0 t1 
-        WHERE 89> t1. c1 
-        ORDER BY c9, c11 
-        LIMIT 2316622805712276698
-    ) true 
-    ORDER BY c13 ASC
-) as subq1 
-WHERE subq1. c13= CASE subq1. c13 
-    WHEN subq1. c13= subq1. c13 THEN subq1. c13 
-    ELSE subq1. c13 
-END 
-OR subq1. c13= subq1. c13;
-"""
+def remove_where_args(sql: str, index: int) -> str:
+    """
+    Remove the `index`-th subcondition from the top-level WHERE clause (if it's a binary expression).
+    
+    Args:
+        sql (str): The input SQL query.
+        index (int): Zero-based index of the subcondition to remove.
 
-# Parse the SQL
-tree = parse_one(sql)
+    Returns:
+        str: Modified SQL query with the selected subcondition removed.
+    """
+    def flatten_conditions(expr, expr_type):
+        if isinstance(expr, expr_type):
+            return flatten_conditions(expr.args['this'], expr_type) + flatten_conditions(expr.args['expression'], expr_type)
+        else:
+            return [expr]
 
-# Find the WHERE clause expression
-where_clause = tree.find(exp.Where)
-if where_clause:
+    # Parse the original SQL
+    print("ALL NOT GOOD")
+    try:
+        tree = parse_one(sql)
+    except Exception as e:
+        print("WHY DO YOU DO THIS")
+        print(e)
+        return ""
+    print("ALL KINDA GOOD")
+    where_clause = tree.find(exp.Where)
+    print("ALL GOOD")
+
+    if not where_clause:
+        return ""
+        raise ValueError("No WHERE clause found.")
+
     condition = where_clause.this
+    expr_type = type(condition)
 
-    # Flatten binary expressions (AND/OR chain)
-    if isinstance(condition, (exp.And, exp.Or)):
-        # Extract all subconditions
-        def flatten_conditions(expr):
-            if isinstance(expr, type(condition)):
-                return flatten_conditions(expr.args['this']) + flatten_conditions(expr.args['expression'])
-            else:
-                return [expr]
+    if expr_type not in (exp.And, exp.Or):
+        return ""
+        raise ValueError("WHERE clause is not a compound AND/OR condition.")
 
-        subconds = flatten_conditions(condition)
-        print(f"Found {len(subconds)} sub-conditions in WHERE clause.")
+    subconds = flatten_conditions(condition, expr_type)
 
-        # Iteratively remove each subcondition
-        for i in range(len(subconds)):
-            # Re-parse the SQL fresh each time
-            modified_tree = parse_one(sql)
-            mod_where = modified_tree.find(exp.Where)
-            mod_condition = mod_where.this
+    if index < 0 or index >= len(subconds):
+        return ""
+        raise IndexError("Condition index out of range.")
 
-            # Rebuild condition skipping the i-th subcondition
-            kept_conditions = [sc for j, sc in enumerate(flatten_conditions(mod_condition)) if j != i]
+    # Remove the selected subcondition
+    kept_conditions = [sc for j, sc in enumerate(subconds) if j != index]
 
-            # Reconstruct binary chain (left-associative)
-            if kept_conditions:
-                new_cond = kept_conditions[0]
-                for sc in kept_conditions[1:]:
-                    new_cond = type(mod_condition)(this=new_cond, expression=sc)
-                mod_where.set("this", new_cond)
-            else:
-                # No conditions left: remove WHERE clause entirely
-                modified_tree.set("where", None)
-
-            print(f"\n--- SQL with WHERE condition {i+1} removed ---")
-            print(modified_tree.sql())
+    if kept_conditions:
+        new_cond = kept_conditions[0]
+        for sc in kept_conditions[1:]:
+            new_cond = expr_type(this=new_cond, expression=sc)
+        where_clause.set("this", new_cond)
     else:
-        print("WHERE clause is not a compound condition (no AND/OR). Nothing to remove.")
-else:
-    print("No WHERE clause found.")
+        tree.set("where", None)
+
+    return tree.sql()

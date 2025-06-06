@@ -44,6 +44,8 @@ COPY get_sql_statements.py .
 COPY delta_reduce_single_statements.py .
 COPY remove_redundant_parentheses.py .
 COPY simple_changes_single_statement.py .
+COPY remove_where_args.py .
+COPY remove_select_args.py .
 
 COPY run_sqlite.py .
 

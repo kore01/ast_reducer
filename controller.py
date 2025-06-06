@@ -5,9 +5,8 @@ from pathlib import Path
 from delta_reduce_single_statements import delta_reduce_single_statements
 from get_sql_statements import get_sql_statements
 
-
-from remove_redundant_parentheses import remove_redundant_parentheses
 from run_sqlite import run_sqlite
+from simple_changes_single_statement import simple_changes_single_statement
 
 
 #take the OG path and change it to a copy
@@ -68,13 +67,14 @@ print(f"The expected_output_326 is:  {expected_output_326}")
 #3. try to reduce the single statement with delta (done)
 #repeat while the steps improve the result
 
-attempt = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-while(attempt != content):
+attempt = simple_changes_single_statement(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+attempt2 = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+while(attempt2 != content):
     content = attempt
-    attempt = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-    print(attempt)
+    attempt = simple_changes_single_statement(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+    attempt2 = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
 
-print(query_path)
+
 with open(query_path, "w", encoding="utf-8") as f:
     f.write(content)
 

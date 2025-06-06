@@ -10,6 +10,8 @@ import tempfile
 
 from delta_reduce_single_statements import test_for_fail
 from remove_redundant_parentheses import remove_redundant_parentheses
+from remove_select_args import remove_select_args
+from remove_where_args import remove_where_args
 
 
 def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
@@ -59,11 +61,14 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
                 os.remove(curr_path)
             print(curr_path)
             print(f"reduced to empty: {new_sql}")
-            #curr_path.write_text("")
+            
         else:
-            new_sql = reduce_where(next_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
-            #new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
+            new_sql = next_sql
             new_sql = remove_redundant_parentheses(new_sql)
+            new_sql = reduce_where(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
+            new_sql = reduce_select(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
+            #new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
+            #new_sql = remove_redundant_parentheses(new_sql)
             if new_sql.strip().endswith(";"):
                 post_next_sql = new_sql + post_next_sql
             else:
@@ -71,7 +76,7 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
             if not post_next_sql.endswith(";"):
                 post_next_sql = post_next_sql + ";"
 
-            print(f"post_next_sql: {post_next_sql}")
+            #print(f"post_next_sql: {post_next_sql}")
 
             #print(f"new_sql: {new_sql}")
             curr_path.write_text(new_sql)
@@ -93,14 +98,46 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
 def reduce_where(curr_sql_line:str, test_script: Path,
            pre_next_sql: str,  post_next_sql: str,
            expected1: str, expected2: str) -> str:
+    
 
     if len(curr_sql_line) == 0:
         return curr_sql_line
+
+    print("REDUCE WHERE")    
+    i = 0
+    while(1):
+        curr_removed = remove_where_args(curr_sql_line, i)
+        if curr_removed == "": break
+        #if it doesnt fail, then 
+        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+            curr_sql_line = curr_removed
+            print("BIG SUCCESS")
+        else: i+=1
     
-    if test_for_fail(curr_sql_line, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+    return curr_sql_line  
+
+
+def reduce_select(curr_sql_line:str, test_script: Path,
+           pre_next_sql: str,  post_next_sql: str,
+           expected1: str, expected2: str) -> str:
+    
+
+    if len(curr_sql_line) == 0:
         return curr_sql_line
-    else:
-        return curr_sql_line        
+
+    print("REDUCE SELECT")    
+    i = 0
+    while(1):
+        print (i)
+        curr_removed = remove_select_args(curr_sql_line, i)
+        if curr_removed == "": break
+        #if it doesnt fail, then 
+        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+            curr_sql_line = curr_removed
+            print("LARGE SUCCESS")
+        else: i+=1
+    
+    return curr_sql_line  
 
    
 

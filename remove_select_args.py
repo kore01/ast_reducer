@@ -1,35 +1,41 @@
 import sqlglot
-from sqlglot import parse_one
+from sqlglot import parse_one, exp
 
-sql = """SELECT CASE WHEN subq1. c13> subq1. c13 THEN c13 END, subq1. c13, CAST( subq1. c13 AS TEXT), subq1. c13 
-FROM( 
-    SELECT FALSE c13 
-    FROM( 
-        SELECT c2 c9, t1. c5 c11, t1. c1 
-        FROM t0 t1 
-        WHERE 89> t1. c1 
-        ORDER BY c9, c11 
-        LIMIT 2316622805712276698
-    ) true 
-    ORDER BY c13 ASC
-) as subq1 
-WHERE subq1. c13= CASE subq1. c13 
-    WHEN subq1. c13= subq1. c13 THEN subq1. c13 
-    ELSE subq1. c13 
-END 
-OR subq1. c13= subq1. c13;
-"""
+def remove_select_args(sql: str, index: int) -> str:
+    """
+    Remove the `index`-th element from the top-level SELECT clause.
 
-# Parse once and store number of expressions
-tree = parse_one(sql)
-select_clause = tree.find(sqlglot.exp.Select)
-original_count = len(select_clause.expressions)
+    Args:
+        sql (str): The input SQL query.
+        index (int): Zero-based index of the SELECT element to remove.
 
-# Loop through and remove each expression one at a time
-for i in range(original_count):
-    modified_tree = parse_one(sql)
-    modified_select = modified_tree.find(sqlglot.exp.Select)
-    if i < len(modified_select.expressions):
-        del modified_select.expressions[i]
-    print(f"\n--- SQL with SELECT expression {i+1} removed ---")
-    print(modified_tree.sql())
+    Returns:
+        str: Modified SQL query with the selected SELECT element removed.
+    """
+    try:
+        tree = parse_one(sql)
+    except Exception as e:
+        print("Failed to parse SQL:", e)
+        return ""
+
+    select = tree.find(exp.Select)
+    if not select:
+        print("No SELECT clause found.")
+        return ""
+
+    expressions = select.expressions
+    if index < 0 or index >= len(expressions):
+        print(index)
+        print("Index out of range for SELECT expressions.")
+        return ""
+
+    # Remove the selected expression
+    new_expressions = [expr for i, expr in enumerate(expressions) if i != index]
+
+    if new_expressions:
+        select.set("expressions", new_expressions)
+    else:
+        # If no select expressions left, remove them all (empty SELECT)
+        select.set("expressions", [])
+
+    return tree.sql()
