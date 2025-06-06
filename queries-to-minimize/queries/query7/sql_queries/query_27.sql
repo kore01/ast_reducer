@@ -1,1 +1,0 @@
-CREATE VIEW view4(c0,c1,c2) AS SELECT * FROM ( t1 ) AS xnueaz WHERE TRUE;

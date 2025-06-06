@@ -1,1 +1,0 @@
-INSERT INTO tbl0 VALUES ('e;

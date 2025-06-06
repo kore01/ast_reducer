@@ -1,1 +1,0 @@
-CREATE VIEW IF NOT EXISTS view0(c0,c1) AS SELECT t0.c1 AS kgvprj, t0.c0 FROM ( t0 ) WHERE TRUE;

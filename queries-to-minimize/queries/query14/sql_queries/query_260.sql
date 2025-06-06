@@ -1,1 +1,0 @@
-INSERT INTO t5 VALUES('-u!.j!p2P rZ',-7608565,'etWPioGcJ-r9');

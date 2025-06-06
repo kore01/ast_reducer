@@ -1,5 +1,5 @@
 #Query files
-**/*query_*
+**/query_*.sql
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

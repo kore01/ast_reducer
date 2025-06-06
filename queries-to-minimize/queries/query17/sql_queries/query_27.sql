@@ -1,1 +1,0 @@
-INSERT INTO tbl0 VALUES (0xd38ef6e98626d99c, 0.013037, 0.0600782), (0x47b6e1299a32a5a7, '&]0MeC{$>Ob5', NULL), (NULL, 0.402507, 'y=YxUoKo8v&5(M()f#@86?&K!%2@@z_Bl._/OdZ|K9?[YH<tDKN="4mE(I'), (x'EAA5', '', NULL), (NULL, 0.020939, X'A5');

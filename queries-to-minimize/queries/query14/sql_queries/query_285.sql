@@ -1,1 +1,0 @@
-INSERT INTO t5 VALUES('bT-Nxqsh',-1028521,'g2SsLta,KC fnlM!EITo');

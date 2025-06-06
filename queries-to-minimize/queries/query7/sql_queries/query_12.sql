@@ -1,1 +1,0 @@
-INSERT INTO t1 (c1, c2, c0) VALUES (0, 7768, -9950);

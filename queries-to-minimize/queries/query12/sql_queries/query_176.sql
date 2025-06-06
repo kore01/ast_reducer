@@ -1,1 +1,0 @@
-CREATE INDEX idx_t0_2 ON t0(c2);

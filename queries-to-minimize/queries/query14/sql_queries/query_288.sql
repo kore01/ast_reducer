@@ -1,1 +1,0 @@
-INSERT INTO t5 VALUES('tfU3oMigZU1ZvvCdAmU6',5315105,'t-Vazhk');

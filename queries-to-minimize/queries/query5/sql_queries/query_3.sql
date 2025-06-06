@@ -1,1 +1,0 @@
-INSERT OR REPLACE INTO biq (ype, ucn, ynu) VALUES (CURRENT_TIMESTAMP , 1 , 1 );

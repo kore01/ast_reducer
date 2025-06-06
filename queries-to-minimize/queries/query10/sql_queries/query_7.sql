@@ -1,1 +1,0 @@
-CREATE INDEX IF NOT EXISTS idx_E69uH ON t_N96(c_2mQB9Yl, c_8Y8Sjb) WHERE c_Ri8lD7pMcg < x'F4';

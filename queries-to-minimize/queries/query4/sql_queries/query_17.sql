@@ -1,1 +1,0 @@
-INSERT INTO t1 (col0,col1,col2,col3,col4) VALUES ('Lr',-1650880014,'HAFG',-1384780549,'e0ZItlu');

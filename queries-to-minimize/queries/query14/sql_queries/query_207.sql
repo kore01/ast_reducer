@@ -1,1 +1,0 @@
-INSERT INTO t4 VALUES('M5jbc_El',' XAstPv8B',-47857671);

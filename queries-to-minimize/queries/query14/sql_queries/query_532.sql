@@ -1,1 +1,0 @@
-CREATE INDEX idx_t9_4 ON t9(c4);

@@ -1,1 +1,0 @@
-INSERT INTO t6 VALUES('0','3V?fz0HAD1CyLT.JnLf','0',1);

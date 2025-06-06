@@ -1,1 +1,0 @@
-SELECT DISTINCT * FROM table_3, table_2 WHERE EXISTS ( SELECT  table_3_c1 FROM table_3 LIMIT NULL ) LIMIT 3;

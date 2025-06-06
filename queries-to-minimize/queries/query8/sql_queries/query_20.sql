@@ -1,1 +1,0 @@
-SELECT tbl_leebq.icol_lpfht FROM tbl_leebq WHERE (tbl_leebq.tcol_mlyky != CAST(INSTR('NULL', 'Gj') AS TEXT) OR (EXISTS (SELECT tbl_leebq.icol_lpfht FROM tbl_leebq WHERE tbl_leebq.tcol_mlyky BETWEEN 'v_bxuxi' AND 'v_schms') OR (tbl_leebq.tcol_mlyky IS NULL AND EXISTS (SELECT 1 FROM tbl_leebq WHERE tbl_leebq.icol_lpfht IS NULL))));

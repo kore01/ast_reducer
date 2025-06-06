@@ -1,1 +1,0 @@
-INSERT INTO t6 VALUES('RRxWt','fantnM-Xvji4MM7_mtRj','0DdiugiLrJrr!F',-63.490000000000001989);

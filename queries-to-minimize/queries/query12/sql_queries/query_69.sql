@@ -1,1 +1,0 @@
-INSERT INTO t4 VALUES(NULL,-28.289999999999999147,'CaTfinYrecXYyo-dad','mxKWEik85','m,BuW?GWUhtv.!','Test with spaces',547816122);

@@ -1,1 +1,0 @@
-INSERT INTO tbl0 VALUES (NULL, NULL, -2261513134583803180), ('(-.Jv''AI@#q]5kwY/)wtS2X^\o)'']mt_X#RP||k5$7;

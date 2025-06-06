@@ -1,1 +1,0 @@
-INSERT INTO t9 VALUES(-257016940,0,X'3267',NULL,328341640,X'0000000000','2014-07-13','Comma, period. dash-underscore_');

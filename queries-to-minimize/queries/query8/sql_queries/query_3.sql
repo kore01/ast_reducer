@@ -1,1 +1,0 @@
-CREATE TABLE tbl_zffns (rcol_cpxod REAL DEFAULT -70786.71435411437, tcol_kxvql TEXT, icol_gktxj INTEGER DEFAULT -1897, icol_lqsxa INTEGER, rcol_opwwf REAL DEFAULT 42882.18328236521);

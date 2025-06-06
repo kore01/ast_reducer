@@ -1,1 +1,0 @@
-INSERT INTO tbl0 VALUES (0.249207, 'hm]P_0sRYRk4-)I\|5kbrE_OcIN3td"CL?f> T?+WnUW[on+H', 0.361649);

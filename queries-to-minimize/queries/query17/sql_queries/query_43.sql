@@ -1,1 +1,0 @@
-$c-1TLK10X6J,-ncg6Mh^#14LZNQ!+VUlSfiWae%xe2tHsT%8', NULL, 0x1d4498767d84f5c1), (0.447644, 0.873258, 0X2196b5415a42e21a), ('mmB9IgH	*>@Sd0H<e9\''@H-Hx/Y', NULL, X'03');

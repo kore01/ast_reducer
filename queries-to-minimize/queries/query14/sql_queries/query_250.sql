@@ -1,1 +1,0 @@
-INSERT INTO t4 VALUES('_.c3oZ','!!D rkE7FjhkcxM',1219313134);

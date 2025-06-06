@@ -1,2 +1,0 @@
-DELETE FROM t0
-WHERE t0.c2 < t0.c2;

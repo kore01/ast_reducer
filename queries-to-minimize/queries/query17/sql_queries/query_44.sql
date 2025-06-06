@@ -1,1 +1,0 @@
-CREATE UNIQUE INDEX s26 ON tbl0(~((-('#D/L?qFFQT3K;

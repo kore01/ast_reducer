@@ -1,1 +1,0 @@
-DELETE FROM table_1 WHERE LOWER ( 1 );

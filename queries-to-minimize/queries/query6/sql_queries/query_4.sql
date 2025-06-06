@@ -1,1 +1,0 @@
-INSERT INTO t0 VALUES (TRUE, likely( FALSE), TRUE, 'text75', NULL, 26, FALSE);

@@ -1,1 +1,0 @@
-UPDATE tbl_eusog SET tcol_owhcs = 'v_zvlsw', tcol_rjuwd = 3763, rcol_vtgkp = + (-55701.25116338958), tcol_yjpnm = 'v_gjkng' WHERE tbl_eusog.rcol_vtgkp BETWEEN -10385.234171359421 AND 22447.24475393456;

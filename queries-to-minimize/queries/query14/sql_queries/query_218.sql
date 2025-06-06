@@ -1,1 +1,0 @@
-INSERT INTO t4 VALUES('6bwH4OkojV','._DeumGhbl-UK',66582897);

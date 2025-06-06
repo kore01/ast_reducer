@@ -1,1 +1,0 @@
-INSERT INTO t1 VALUES('e8!IR3zSzSiV !f.B','v1.ClsyDa',72540911,281113672,'57xEd7FuQk',0,'nkyAxgL 9,Kio');

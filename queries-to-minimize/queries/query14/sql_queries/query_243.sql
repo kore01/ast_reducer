@@ -1,1 +1,0 @@
-INSERT INTO t4 VALUES('f-5l2EHAw7!R?, ','sh?xb',-485321281);

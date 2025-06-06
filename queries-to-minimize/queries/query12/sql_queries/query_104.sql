@@ -1,1 +1,0 @@
-INSERT INTO t5 VALUES('GAr8E8scp7ib X9.!wak',-32768,NULL);

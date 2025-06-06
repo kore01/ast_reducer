@@ -1,1 +1,0 @@
-INSERT INTO tbl0 VALUES (X'5BFE7D', 'X1C', x'C005');

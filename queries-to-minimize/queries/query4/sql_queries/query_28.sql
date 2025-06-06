@@ -1,1 +1,0 @@
-INSERT INTO t3 (col1,col2,col3,col4,col5) VALUES (-1790726037,-29594294,'uU1sAcGd',2146383358,'ArnoC6');
