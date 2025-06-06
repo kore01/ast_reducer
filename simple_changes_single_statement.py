@@ -11,7 +11,7 @@ import tempfile
 from remove_redundant_parentheses import remove_redundant_parentheses
 from run_sqlite import run_sqlite
 
-def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
+def simple_changes_single_statements(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
     curr_sql = ""
     reduced_sql = ""
     pre_next_sql = ""
@@ -36,9 +36,7 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
     for i, curr_path in reversed(list(enumerate(query_files))):
 
         next_sql = curr_path.read_text(encoding='utf-8')
-        
         print(f"curr_sql: {next_sql}")
-
 
         # Collect post_next_sql from all later files
         pre_next_sql = ""
@@ -53,12 +51,7 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
             post_next_sql = new_sql + post_next_sql
             if not post_next_sql.endswith(";"):
                 post_next_sql = post_next_sql + ";"
-                
-            if os.path.isfile(curr_path):
-                os.remove(curr_path)
-            print(curr_path)
             print(f"reduced to empty: {new_sql}")
-            #curr_path.write_text("")
         else:
             new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
             new_sql = remove_redundant_parentheses(new_sql)
@@ -71,20 +64,6 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
 
             print(f"post_next_sql: {post_next_sql}")
 
-            #print(f"new_sql: {new_sql}")
-            curr_path.write_text(new_sql)
-
-        #print(f"post_next_sql: {post_next_sql}")
-
-        #if next_sql.strip().endswith(";"):
-        #    if(new_sql == ""):
-        #    post_next_sql = new_sql + post_next_sql
-        #else:
-        #    post_next_sql = new_sql + post_next_sql
-        #pre_next_sql += '\n' + reduced_sql
-    
-    #print(post_next_sql)
-    #print(f"Reduced query: {post_next_sql}")
     return post_next_sql
 
 #def reduce_sql(expected_output_326: str, expected_output_339: str, pre_next_sql: str, post_next_sql: str, curr_sql_line: str) -> str:
@@ -154,8 +133,8 @@ def split_token_aware(curr_sql_line: str, n: int) -> List[str]:
                 # punctuation, append directly
                 part += t
         if(part.strip()): parts.append(part.strip())
-    print("PARTS")
-    print(parts)
+    #print("PARTS")
+    #print(parts)
     return parts
 
 def comps_of_split(parts: List[str]) -> List[str]:
