@@ -1,0 +1,1 @@
+INSERT INTO tbl0 VALUES ('1wls	4ETBEEDH|-;

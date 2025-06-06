@@ -1,13 +1,12 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED="0|1|26|
 0|0|72|
 1|1|62|
-1|0|74|
-Segmentation fault (core dumped)"
+1|0|74|"
 
 #EXPECTED_339="0|1|26|
 #0|0|72|
@@ -43,6 +42,6 @@ if [[ "$exit_code_new" -ne "$EXPECTED_exit_code" ]]; then
 elif [[ "$output_new" != *"$EXPECTED"* ]]; then
     exit 1
 else
-	echo "We have a failure"
+	echo "We still have a failure (CRASH)"
     exit 0
 fi

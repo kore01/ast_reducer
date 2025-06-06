@@ -1,6 +1,6 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326="56.52|0|66.16|2013-06-17|48\||"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326=""
@@ -28,7 +28,7 @@ echo "326: $output_326"
 echo "Expected 339: $EXPECTED_339"
 echo "339: $output_339"
 
-echo "$exit_code_339"
+#echo "$exit_code_339"
 
 # Explanation of the if clauses:
 # 1 and 2: exit codes of the original_test output should be equal to the new outputs

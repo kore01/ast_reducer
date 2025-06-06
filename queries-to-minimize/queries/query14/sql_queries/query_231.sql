@@ -1,0 +1,1 @@
+INSERT INTO t4 VALUES('p!6AZSP2bg,gd mi7UA','ojnbnMWm',106532031);

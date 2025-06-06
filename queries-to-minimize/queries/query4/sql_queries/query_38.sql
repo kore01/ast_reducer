@@ -1,0 +1,1 @@
+INSERT INTO t4 (col0,col1,col3) VALUES ('shWWxc7rq1',NULL,-1660962766);

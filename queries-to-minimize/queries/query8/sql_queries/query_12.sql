@@ -1,0 +1,1 @@
+INSERT OR FAIL INTO tbl_leebq VALUES (ABS(-7681), 'v_hbrey'), (CAST(PRINTF('%d', COALESCE(NULL, NULL, 6773)) AS INTEGER), CAST(TRIM('v_brdvm', 'P') < 'v_mpfhu' AS TEXT)), (CAST(CAST(TRIM(CAST(3185 AS TEXT), 'n') AS REAL) AS INTEGER), 'v_syzps'), (-7634, CAST('v_sgasq' - -9223372036854775808 AS TEXT)), (552, 'v_afgko');

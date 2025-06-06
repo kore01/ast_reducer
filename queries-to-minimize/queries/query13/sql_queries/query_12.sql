@@ -1,0 +1,1 @@
+INSERT INTO T3(c1, c2, c3) VALUES (308, -611, 628);

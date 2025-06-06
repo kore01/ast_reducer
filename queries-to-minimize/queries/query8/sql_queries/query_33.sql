@@ -1,0 +1,1 @@
+CREATE VIEW view_hofrz AS SELECT * FROM view_tezft WHERE (view_tezft.tcol_mlyky IS NOT NULL OR (view_tezft.tcol_mlyky LIKE '%v_izazi%' OR view_tezft.tcol_mlyky IS NULL)) ORDER BY view_tezft.tcol_mlyky;

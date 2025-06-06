@@ -1,0 +1,1 @@
+INSERT INTO t1 VALUES('0','.w9Q7h.RQ',-1,1,'jlI5W4d78qsdZ',0,NULL);

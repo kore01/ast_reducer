@@ -1,0 +1,1 @@
+CREATE VIEW zua  AS  SELECT  ype, ucn,  AVG(ynu) FROM biq WHERE  ucn  BETWEEN 0  AND 1363441146;

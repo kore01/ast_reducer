@@ -1,0 +1,1 @@
+CREATE VIEW view3(c0,c1,c2,c3,c4,c5,c6,c7,c8,c9) AS SELECT * FROM t0 AS stjdgv, ( view1 ) AS czdvgs, ( SELECT apfspc.c0, apfspc.c2 FROM (main.t1 AS apfspc JOIN view1 ON 1) WHERE TRUE ) AS gvihsa, ( SELECT t2.c1, t2.c0, jnebub.c0 AS eadjzj, jnebub.c1, jnebub.c2, t2.c2 FROM view1, t2, t2 AS jnebub WHERE upper(t2.c0) ) AS kljnyt WHERE FALSE;

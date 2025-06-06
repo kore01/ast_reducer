@@ -1,0 +1,1 @@
+REPLACE INTO tbl_eoopk (tcol_sfemr, tcol_ufzkn) VALUES (PRINTF('%.3s', 'v_knsah'), CAST(CAST('v_seone' AS INTEGER) AS TEXT)), (CAST('v_wdfdu' / 'v_tambx' AS TEXT), 'v_ieysw'), (CAST(COALESCE(NULL, CAST('v_koeee' AS REAL)) AS TEXT), NULL), ('v_kblja', 'abc');

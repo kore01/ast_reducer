@@ -1,0 +1,1 @@
+INSERT INTO t2 (col0,col1,col2) VALUES ('r',-895172089,-925435689);

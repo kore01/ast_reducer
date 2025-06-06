@@ -1,0 +1,1 @@
+DELETE FROM t_DX44 WHERE c_ewZ = 'PxP1EILH';

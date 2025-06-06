@@ -1,6 +1,6 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326=""

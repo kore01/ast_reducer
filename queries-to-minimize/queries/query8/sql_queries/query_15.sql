@@ -1,0 +1,1 @@
+INSERT OR ROLLBACK INTO tbl_eusog (tcol_rjuwd) VALUES (-57389.61365313458), (-2582), (3492), (1);

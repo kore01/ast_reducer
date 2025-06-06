@@ -1,6 +1,6 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326="|1.0|0|||11960.1801526769
@@ -32,6 +32,7 @@ EXPECTED_339_exit_code=0
 # 3.26.0 and 3.49.0
 output_326=$(sqlite3-3.26.0 < "$QUERY" 2>&1)
 exit_code_326=$?
+
 output_339=$(sqlite3-3.39.4 < "$QUERY" 2>&1)
 exit_code_339=$?
 

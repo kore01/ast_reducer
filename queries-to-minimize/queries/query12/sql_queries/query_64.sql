@@ -1,0 +1,1 @@
+INSERT INTO t3 VALUES(0,'3g!kn7','67ixftZMujDY!W.ZG1Vk',NULL);

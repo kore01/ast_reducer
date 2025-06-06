@@ -1,0 +1,1 @@
+WITH cte_3 AS ( SELECT  * FROM table_1 ) SELECT DISTINCT table_1_c0 FROM table_0, table_1 JOIN table_3 ON table_0.table_0_c1 < table_3.table_3_c0 WHERE EXISTS ( SELECT  * FROM table_3 ORDER BY table_3_c0 LIMIT 1 ) GROUP BY table_3_c0 ORDER BY table_0_c0 ASC LIMIT 0;

@@ -1,0 +1,1 @@
+INSERT INTO t3 (col0,col1,col2,col5) VALUES ('I',-1488912520,-1164400479,'mff2TCQw');

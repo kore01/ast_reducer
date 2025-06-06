@@ -1,0 +1,1 @@
+SELECT t_b8TmXJYj7.c_mfOVVp6LJ AS alias_8yO, NOT COUNT(t_EiJ.c_gjO9hafpB) AS alias_hhH, * FROM t_EiJ, t_KVR, t_b8TmXJYj7 WHERE c_mfOVVp6LJ GROUP BY c_4fLRz, c_pLcd, c_0g82YslPQP HAVING FALSE ORDER BY 1;

@@ -1,0 +1,1 @@
+REPLACE INTO t_DX44 (c_LGUf, c_Hlmf3w, c_ewZ, c_EwP, c_YBA7sBV) VALUES (-337373, 700752.2922865644, 'X6uz2_2', 'jBG_3', 'goHkluIlVWV39WFOlHFN_4');

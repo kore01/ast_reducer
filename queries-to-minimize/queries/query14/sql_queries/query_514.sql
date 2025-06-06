@@ -1,0 +1,1 @@
+CREATE VIEW v0 AS SELECT c2, c5, c3 FROM t0;

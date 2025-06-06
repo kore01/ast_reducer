@@ -1,0 +1,1 @@
+INSERT INTO T2(c1, c2) VALUES (-547, 135);

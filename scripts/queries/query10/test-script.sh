@@ -1,11 +1,11 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326="6"
 
-EXPECTED_339="Runtime error near line 5: NOT NULL constraint failed: t_N96.c_HoR4r6 (19)
+EXPECTED_339="NOT NULL constraint failed: t_N96.c_HoR4r6 (19)
 5"
 
 EXPECTED_326_exit_code=0 

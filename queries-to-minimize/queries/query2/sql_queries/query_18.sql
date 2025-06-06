@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM t_DX44;

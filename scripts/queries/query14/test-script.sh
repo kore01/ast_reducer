@@ -1,9 +1,11 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
-EXPECTED="Error: near line 534: database disk image is malformed"
+#EXPECTED="Error: near line 534: database disk image is malformed"
+
+EXPECTED="database disk image is malformed"
 
 #EXPECTED_339="0|1|26|
 #0|0|72|
@@ -39,6 +41,6 @@ if [[ "$exit_code_new" -ne "$EXPECTED_exit_code" ]]; then
 elif [[ "$output_new" != *"$EXPECTED"* ]]; then
     exit 1
 else
-	echo "We have a failure"
+	echo "We still have a failure (CRASH)!"
     exit 0
 fi

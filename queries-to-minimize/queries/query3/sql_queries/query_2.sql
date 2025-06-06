@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS table_1  (table_1_c0 REAL );

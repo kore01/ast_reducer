@@ -1,0 +1,1 @@
+INSERT INTO tbl0 VALUES (0.479377, NULL, 't>');

@@ -1,0 +1,1 @@
+DELETE FROM tbl_wqiwo WHERE EXISTS (SELECT LIKELIHOOD(326 < tbl_wqiwo.icol_dhwup, 0.5) FROM tbl_wqiwo WHERE (tbl_wqiwo.icol_jcscw IN (1, 1, 1, 1, 1) AND (tbl_wqiwo.tcol_vwipe BETWEEN 'v_rpfnv' AND 'v_wvzad' OR EXISTS (SELECT UNLIKELY(tbl_wqiwo.tcol_vwipe) != 'v_ircoe' FROM tbl_wqiwo WHERE tbl_wqiwo.tcol_wskpp IN (1, 1, 1) LIMIT 16 OFFSET 20))));

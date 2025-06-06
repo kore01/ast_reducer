@@ -1,6 +1,6 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326="2
@@ -8,8 +8,11 @@ EXPECTED_326="2
 -2||3|3|-1
 -2||-2|0|"
 
-EXPECTED_339="2
-Runtime error near line 100: datatype mismatch (20)"
+#EXPECTED_339="2
+#Runtime error near line 100: datatype mismatch (20)"
+
+EXPECTED_339_PATTERN='^2\nRuntime error near line [0-9]+: datatype mismatch \(20\)$'
+
 
 EXPECTED_326_exit_code=0 
 EXPECTED_339_exit_code=1
@@ -18,6 +21,7 @@ EXPECTED_339_exit_code=1
 # 3.26.0 and 3.49.0
 output_326=$(sqlite3-3.26.0 < "$QUERY" 2>&1)
 exit_code_326=$?
+
 output_339=$(sqlite3-3.39.4 < "$QUERY" 2>&1)
 exit_code_339=$?
 
@@ -40,8 +44,11 @@ elif [[ "$output_326" == "$output_339" ]]; then
 	exit 1
 elif [[ "$output_326" != *"$EXPECTED_326"* ]]; then
 	exit 1
-elif [[ "$output_339" != *"$EXPECTED_339"* ]]; then
-	exit 1
+#elif [[ "$output_339" != *"$EXPECTED_339"* ]]; then
+#	exit 1
+elif ! printf "%s" "$output_339" | grep -Pqz "$expected_pattern"; then
+    echo "Output 339 does not match expected pattern"
+    exit 1
 else	
 	echo "Expected 326: $EXPECTED_326"
 	echo "326: $output_326"

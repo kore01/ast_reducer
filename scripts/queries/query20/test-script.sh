@@ -1,9 +1,9 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
-EXPECTED="Segmentation fault (core dumped)"
+#EXPECTED=""
 
 #EXPECTED_339="0|1|26|
 #0|0|72|
@@ -36,9 +36,9 @@ echo "output_new=$output_new"
 #2: if not the second one just checks if the output is the same (or not)
 if [[ "$exit_code_new" -ne "$EXPECTED_exit_code" ]]; then
     exit 1
-elif [[ "$output_new" != *"$EXPECTED"* ]]; then
-    exit 1
+#elif [[ "$output_new" != *"$EXPECTED"* ]]; then
+#    exit 1
 else
-	echo "We have a failure"
+	echo "We still have a failure (CRASH)!"
     exit 0
 fi

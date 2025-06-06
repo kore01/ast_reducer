@@ -1,0 +1,1 @@
+INSERT INTO t1 VALUES('g0B-3cE24PH?r3ts4 ','rAvbuBfm',32767,0,'NA',1,'Xy.9ZYLP iJ0!4ZuuIky');

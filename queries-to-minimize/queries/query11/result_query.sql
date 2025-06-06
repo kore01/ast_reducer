@@ -1,0 +1,5 @@
+CREATE TABLE V( BOOLEAN, q BOOLEAN);
+INSERT INTO V VALUES(( 103=( 86)),( NOT true));
+INSERT INTO V SELECT* FROM( VALUES(( NULL), false),( NULL, NULL)) WHERE(( false< true)>( NOT true));
+SELECT* FROM V WHERE( NOT(( 52)<(-( 18* 47))));
+;

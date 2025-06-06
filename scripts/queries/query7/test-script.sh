@@ -1,6 +1,6 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326="-1|
@@ -19,23 +19,30 @@ EXPECTED_339_exit_code=0
 # 3.26.0 and 3.49.0
 output_326=$(sqlite3-3.26.0 < "$QUERY" 2>&1)
 exit_code_326=$?
+
 output_339=$(sqlite3-3.39.4 < "$QUERY" 2>&1)
 exit_code_339=$?
 
-#echo "Expected 326: $EXPECTED_326"
-#echo "326: $output_326"
-#echo "Expected 339: $EXPECTED_339"
-#echo "339: $output_339"
+echo "$QUERY"
 
-#echo "$exit_code_339"
+
+echo "Expected 326: $EXPECTED_326"
+echo ""
+echo "326: $output_326"
+echo ""
+echo "Expected 339: $EXPECTED_339"
+echo ""
+echo "339: $output_339"
+echo ""
+echo "$exit_code_326"
+echo "$exit_code_339"
+
 
 # Explanation of the if clauses:
 # 1 and 2: exit codes of the original_test output should be equal to the new outputs
 # 3: the outputs should differ between output_326 and output_339
 # 4 - 5: similarly if the outputs of the two versions changed compared to the old one (original_test) this is also bad
 if [[ "$EXPECTED_326_exit_code" -ne "$exit_code_326" ]]; then
-    echo "Expected 326: $EXPECTED_326"
-    echo "326: $output_326"
     exit 1 
 elif [[ "$EXPECTED_339_exit_code" -ne "$exit_code_339" ]]; then
     exit 1 
@@ -47,8 +54,15 @@ elif [[ "$output_339" != *"$EXPECTED_339"* ]]; then
 	exit 1
 else	
 	echo "We still have a failure (DIFF)!"
+
+	echo "Expected 326: $EXPECTED_326"
+    echo "326: $output_326"
+    echo "find diff: "
+    diff <(echo "$output_326") <(echo "$EXPECTED_326")
+    echo "Expected 339: $EXPECTED_339"
+    echo "339: $output_339"
+    echo "find diff: "
+    diff <(echo "$output_339") <(echo "$EXPECTED_339")
 	exit 0
 fi
-
-
 

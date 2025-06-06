@@ -1,0 +1,1 @@
+INSERT INTO t2 (c1, c2, c0) VALUES (9229, NULL, -6298);

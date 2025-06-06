@@ -1,0 +1,1 @@
+INSERT INTO t7 VALUES(1423313866,-87.70000000000000284,'mZcj5qW02o1bH.W2o2','SFpIf ezyB_cqE','Oi_ZtCdwa','.mha02py6_zV','pztItjmjm5ozeD!cz',6768271,27246,'ly878r6');

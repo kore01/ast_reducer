@@ -1,0 +1,1 @@
+INSERT INTO tbl0 VALUES ('X]X}I^@^'')]6Zc]?CHKhq!zj+O6Z_}NWn=wgV9v@Q+$UJ', NULL, NULL), ('T(1IB%SxTXD("ur5Lb/D}*''VnI]0qR4jP+40>zYn@EM@5"tYtzLt''[jSvN<', '', x'C8'), (0.737685, X'9E', 0X655ADB1217E27FA5), (-171480664182283195, 'HeUVKO[YezI".sr/g5GC7vAW9F7" u', x'B8');

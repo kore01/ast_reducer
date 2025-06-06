@@ -1,0 +1,1 @@
+INSERT INTO tbl0 VALUES (0.320845, 'n*ep''kt,TW4M.{Aw!A', NULL);

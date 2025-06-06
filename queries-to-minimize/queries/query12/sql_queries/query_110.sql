@@ -1,0 +1,1 @@
+INSERT INTO t6 VALUES('nWmeBAALg.j-UB','X86XakFa_wIm','EvHmaR2Dq7OUiZ9Px1fl',-1);

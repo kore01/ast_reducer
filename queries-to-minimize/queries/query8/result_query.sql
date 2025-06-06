@@ -1,0 +1,12 @@
+CREATE TABLE tbl_wqiwo (icol_dhwup INTEGER, rcol_eitnk REAL DEFAULT 55001.080638557934, tcol_yqthy TEXT, rcol_bjzii REAL, icol_jcscw INTEGER, tcol_wskpp);
+INSERT OR ABORT INTO tbl_wqiwo (rcol_eitnk, tcol_wskpp, tcol_yqthy) VALUES (1.0, 11960.180152676927, CAST('v_citjr' GLOB 'rAag' AS TEXT)), (CAST(UNLIKELY(- (NULL)) / NULLIF(0,0) AS REAL), 3802.849483805112, 1), (CAST(PRINTF('%.6e', -60733.41165606832 != -54381.10564306702) AS REAL), 8446, 'v_bwaja'), (24227.630527005007, 999999999999999999999999999999999999999999999999999999999999999999999999, 'v_fgzuu');
+SELECT* FROM tbl_wqiwo WHERE tbl_wqiwo. rcol_bjzii IS NULL;
+UPDATE tbl_wqiwo SET icol_dhwup = 9311 > 2147483647, tcol_yqthy = 'v_aoejl', rcol_eitnk = 71845.46360526158, icol_jcscw = 2147483647, rcol_bjzii = COALESCE(-3291.7236589661334 / 68833.1535968991, 52344.8204190307), tcol_wskpp = 2147483647 WHERE tbl_wqiwo.icol_dhwup BETWEEN -8279 AND 0;
+ALTER TABLE tbl_wqiwo ADD COLUMN icol_ovpnc INTEGER;
+WITH with_vysww AS( SELECT* FROM tbl_wqiwo WHERE( EXISTS( SELECT( CAST( 551 AS), 1)) OR tbl_wqiwo. tcol_yqthy) ORDER BY tcol_wskpp), with_ekqzi AS( SELECT*), with_kepqw AS( SELECT* FROM with_vysww GROUP BY with_vysww. icol_ovpnc ORDER BY with_vysww. rcol_bjzii) SELECT* FROM with_kepqw;
+CREATE TABLE tbl_leebq( icol_lpfht, tcol_mlyky TEXT);
+INSERT OR FAIL INTO tbl_leebq VALUES (ABS(-7681), 'v_hbrey'), (CAST(PRINTF('%d', COALESCE(NULL, NULL, 6773)) AS INTEGER), CAST(TRIM('v_brdvm', 'P') < 'v_mpfhu' AS TEXT)), (CAST(CAST(TRIM(CAST(3185 AS TEXT), 'n') AS REAL) AS INTEGER), 'v_syzps'), (-7634, CAST('v_sgasq' - -9223372036854775808 AS TEXT)), (552, 'v_afgko');
+BEGIN;
+END;
+SELECT tbl_leebq. icol_lpfht FROM tbl_leebq WHERE( tbl_leebq. tcol_mlyky!= CAST( INSTR(' NULL',' Gj') AS TEXT) OR( EXISTS( SELECT tbl_leebq. icol_lpfht FROM tbl_leebq WHERE tbl_leebq. tcol_mlyky BETWEEN' v_bxuxi' AND' v_schms') OR( tbl_leebq. tcol_mlyky IS NULL AND EXISTS( SELECT 1 FROM tbl_leebq WHERE tbl_leebq. icol_lpfht IS NULL))));
+;
