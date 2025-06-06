@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import List
 
 import sqlglot
-from sqlglot.errors import ParseError
+from sqlglot.errors import TokenError, ParseError
 
 import tempfile
 
@@ -157,8 +157,8 @@ def split_token_aware(curr_sql_line: str, n: int) -> List[str]:
                 # punctuation, append directly
                 part += t
         if(part.strip()): parts.append(part.strip())
-    print("PARTS")
-    print(parts)
+    #print("PARTS")
+    #print(parts)
     return parts
 
 def comps_of_split(parts: List[str]) -> List[str]:
@@ -178,11 +178,11 @@ def test_for_fail(sql_query: str, test_script: Path,
     #print(curr_query)
 
     try:
-        #print(f"SQL_query_to_test: {curr_query}")
         parsed = sqlglot.parse_one(curr_query)
-        #print("SQL is valid!")
-    except ParseError as e:
-        #print(f"Syntax error: {e}")
+        # If no exception: SQL is valid!
+    except (TokenError, ParseError) as e:
+        print(f"Invalid SQL detected: {curr_query} -- {e}")
+        # You can handle the error here (skip it, log it, count it, etc.)
         return 1
 
     try:
