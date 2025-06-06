@@ -173,20 +173,18 @@ def test_for_fail(sql_query: str, test_script: Path,
     elif(sql_query.endswith(";")):
         curr_query = pre_next_sql + sql_query + post_next_sql
         try:
-            parsed = sqlglot.parse_one(curr_query)
+            parsed = sqlglot.parse_one(sql_query)
             # If no exception: SQL is valid!
-        except (TokenError, ParseError) as e:
+        except (TokenError, ParseError, AttributeError) as e:
             print(f"Invalid SQL detected: {curr_query} -- {e}")
-            # You can handle the error here (skip it, log it, count it, etc.)
             return 1
     else:
         curr_query = pre_next_sql + sql_query +";" + post_next_sql
         try:
-            parsed = sqlglot.parse_one(curr_query)
+            parsed = sqlglot.parse_one(sql_query)
             # If no exception: SQL is valid!
-        except (TokenError, ParseError) as e:
+        except (TokenError, ParseError, AttributeError) as e:
             print(f"Invalid SQL detected: {curr_query} -- {e}")
-            # You can handle the error here (skip it, log it, count it, etc.)
             return 1
     #print(" TRY :")
     #print(curr_query)
