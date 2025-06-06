@@ -30,7 +30,20 @@ with open(query_path, "r", encoding="utf-8") as f:
 sql_file_path = Path(query_path)
 parent_dir = sql_file_path.parent
 sql_queries_dir = parent_dir / "sql_queries"
+
+
+# If the directory exists, remove all its contents
+if sql_queries_dir.exists() and sql_queries_dir.is_dir():
+    for item in sql_queries_dir.iterdir():
+        if item.is_file() or item.is_symlink():
+            item.unlink()
+        elif item.is_dir():
+            shutil.rmtree(item)
+
+# Ensure the directory exists (create it if it doesn't)
 sql_queries_dir.mkdir(parents=True, exist_ok=True)
+
+#sql_queries_dir.mkdir(parents=True, exist_ok=True)
 print(f"Created (or already exists): {sql_queries_dir}")
 get_sql_statements(query_path)
 
