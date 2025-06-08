@@ -135,10 +135,17 @@ def reduce_select(curr_sql_line:str, test_script: Path,
     while(1):
         curr_removed = remove_select_args(curr_sql_line, i)
         if curr_removed == "": break
+        if(curr_sql_line == curr_removed): 
+            i+=1
+            continue
         #if it doesnt fail, then 
         if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
-            curr_sql_line = curr_removed
             print("LARGE SUCCESS")
+            print("from " + curr_sql_line)
+            print("to   " + curr_removed)
+            
+            curr_sql_line = curr_removed
+            
         else: i+=1
     
     return curr_sql_line  
@@ -163,6 +170,10 @@ def reduce_in_brackets(curr_sql_line: str, test_script: Path,
 
         if curr_removed == "":
             break
+
+        if(curr_sql_line == curr_removed): 
+            i+=1
+            continue
 
         # If the test passes (returns 0), accept the reduction
         if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:

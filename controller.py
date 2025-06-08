@@ -73,6 +73,8 @@ while(attempt2 != content):
     content = attempt2
     attempt = simple_changes_single_statement(sql_queries_dir, expected_output_326, expected_output_339, test_path)
     attempt2 = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+    attempt = simple_changes_single_statement(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+    attempt2 = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
 
 
 with open(query_path, "w", encoding="utf-8") as f:
