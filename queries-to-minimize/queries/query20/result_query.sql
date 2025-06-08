@@ -1,0 +1,3 @@
+CREATE TABLE t0( c0, c1, c4 TEXT);
+SELECT subq1. c8 FROM( SELECT TRUE c8 FROM( SELECT c0, t1. c0 FROM t0 t1 WHERE t1. c1= t1. c0 ORDER BY 5819351589579946652) WHERE NULL ORDER BY c8) subq1 WHERE subq1. c8> CASE subq1. c8 WHEN subq1. c8= subq1. c8 THEN subq1. c8 WHEN subq1. c8 THEN subq1. c8 WHEN subq1. c8= subq1. c8 THEN subq1. c8 WHEN subq1. c8< subq1. c8 THEN subq1. c8 WHEN subq1. c8 IS NOT NULL AND subq1. c8= subq1. c8 THEN c8 END ELSE subq1.;
+;

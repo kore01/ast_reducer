@@ -1,0 +1,5 @@
+CREATE TABLE t0( c0, c1, c2, c3 TEXT UNIQUE);
+CREATE INDEX i8 ON t0( c1) WHERE FALSE;
+INSERT INTO t0( c0, c1, c2, c3) VALUES( 894, 89,'',''),( 110, 49,'',' UNIQUE_1_463'),( 588, 74,'',' UNIQUE_2_44'),( 155, 88,'',' UNIQUE_3_765'),( 580, NULL,'',' unique_4_302'),( 936, 13,'',' UNIQUE_5_766'),( 888, 58,'',' UNIQUE_6_32'),( 125, NULL,'',' unique_7_39'),( 209, 87,'',' UNIQUE_8_945'),( 30, 69,' UNIQUE_9_330',' UNIQUE_9_340');
+SELECT t0. c1, t0. c0, COALESCE( AVG( t0. c0) OVER( PARTITION BY t0. c3), 9) FROM t0 WHERE t0. c1 IN( SELECT t0. c1 FROM t0);
+;

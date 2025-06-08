@@ -1,0 +1,72 @@
+#Query files
+**/query_*.sql
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# macOS
+.DS_Store
+
+# Linux
+*~ 
+
+# Logs
+*.log
+
+# SQLite databases
+*.sqlite3
+*.db
+
+# Temporary files
+*.swp
+*.bak
+*.tmp
+*.orig
+
+# Ignore secrets (custom)
+secrets.env
+.env
+.env.*
+
+# Ignore output folders
+output/
+logs/
+sql_queries/

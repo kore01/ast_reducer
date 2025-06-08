@@ -1,19 +1,21 @@
 #!/bin/bash
 
- # original_test.sql
+# new test case
 QUERY="$1"
 
 EXPECTED_326=""
-EXPECTED_339="Runtime error near line 2: NOT NULL constraint failed: F.p (19)"
+#EXPECTED_339="Runtime error near line 2: NOT NULL constraint failed: F.p (19)"
+EXPECTED_339="NOT NULL constraint failed: F.p (19)"
 
 EXPECTED_326_exit_code=0 
 EXPECTED_339_exit_code=1
 
 # if the oracle is a DIFF we just make sure that the reduced sql query still makes sure that there is a difference in error ouputs to 
 # 3.26.0 and 3.49.0
-output_339=$(echo "$QUERY" | sqlite3-3.26.0 2>&1)
+output_326=$(sqlite3-3.26.0 < "$QUERY" 2>&1)
 exit_code_326=$?
-output_339=$(echo "$QUERY" | sqlite3-3.39.4 2>&1)
+
+output_339=$(sqlite3-3.39.4 < "$QUERY" 2>&1)
 exit_code_339=$?
 echo "$QUERY"
 echo "Expected 326: $EXPECTED_326"
@@ -34,14 +36,17 @@ if [[ "$EXPECTED_326_exit_code" -ne "$exit_code_326" ]]; then
 elif [[ "$EXPECTED_339_exit_code" -ne "$exit_code_339" ]]; then
     exit 1 
 elif [[ "$output_326" == "$output_339" ]]; then
-exit 1
+    exit 1
 elif [[ "$output_326" != "$EXPECTED_326" ]]; then
-exit 1
+    exit 1
 elif [[ "$output_339" == *"NOT NULL constraint failed"* ]]; then
-exit 0
+    exit 0
 elif [[ "$output_339" != "$EXPECTED_339" ]]; then
-exit 1
+    exit 1
 else
-echo "We still have a failure (DIFF)!"
-exit 0
+    echo "We still have a failure (DIFF)!"
+    exit 0
 fi
+
+
+

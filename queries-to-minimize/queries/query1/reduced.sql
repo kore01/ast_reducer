@@ -1,1 +1,0 @@
-CREATE TABLE F(p NOT NULL,N);INSERT INTO F SELECT*FROM(VALUES((false),false),(NULL,(NOT(true))))WHERE(((((((0)/((((7*(1*(7)))+(6))))))))=((((((4/(((9)*(8))))))*((((3)/((9))))))*(0))*(((((((4))))*(4))))))=(false<(8)))

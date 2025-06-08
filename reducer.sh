@@ -31,5 +31,7 @@ fi
 
 QUERY_FILE_real=$(realpath "$QUERY_FILE")
 
-#javac Reducer.java || exit 1
-sudo java reducer_helper "$QUERY_FILE_real" "$TEST_SCRIPT"
+python3 controller.py "$QUERY_FILE_real" "$TEST_SCRIPT"
+
+
+#sudo java reducer_helper "$QUERY_FILE_real" "$TEST_SCRIPT"

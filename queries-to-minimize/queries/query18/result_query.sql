@@ -1,0 +1,3 @@
+CREATE TABLE t0( TEXT, c1, c2, c3, c4 TEXT);
+SELECT subq1. c5 c6 FROM( SELECT FALSE c5 FROM( SELECT t1. c3, t1. c2, t1. c2 c7 FROM t0 t1 WHERE t1. c1= t1. c1 ORDER BY c7, c7 LIMIT 5114586222650338778)) subq1 WHERE subq1. subq1. c5> CASE subq1. c5 WHEN subq1. c5= subq1. c5 OR subq1. c5= subq1. c5 THEN c5 ELSE subq1. c5 END ORDER BY c6 COLLATE RTRIM, c6, c6, c6 COLLATE NOCASE;
+;
