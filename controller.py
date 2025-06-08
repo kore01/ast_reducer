@@ -7,6 +7,7 @@ from get_sql_statements import get_sql_statements
 
 from run_sqlite import run_sqlite
 from simple_changes_single_statement import simple_changes_single_statement
+from remove_redundant import remove_redundant
 
 
 #take the OG path and change it to a copy
@@ -40,22 +41,8 @@ if sql_queries_dir.exists() and sql_queries_dir.is_dir():
 # Ensure the directory exists (create it if it doesn't)
 sql_queries_dir.mkdir(parents=True, exist_ok=True)
 
-#sql_queries_dir.mkdir(parents=True, exist_ok=True)
 print(f"Created (or already exists): {sql_queries_dir}")
 get_sql_statements(query_path)
-
-#run sql versions on the original sql
-expected_output_326 = run_sqlite("3.26.0", content)
-expected_output_339 = run_sqlite("3.39.4", content)
-print(f"The expected_output_339 is:  {expected_output_339}")
-print(f"The expected_output_326 is:  {expected_output_326}")
-
-#try to do funcy filtering 
-
-#attempt_all_statements = delta_reduce_many_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-#try to delta reduce on all the statements
-
-#expected_output_339 = run_sqlite("3.39.4", ";CREATE TABLE F( p BOOLEAN NOT NULL NULL NOT NULL, i BOOLEAN) ;INSERT INTO F SELECT * FROM (VALUES ((NOT false), false), (NULL, (NOT (NOT true)))) AS L WHERE (((+(+(-((+110) / (+((-(-150)) * ((247 * (91 * (-47))) + (-86)))))))) = ((((+(+(24 / (+((+89) * (+58)))))) * (-(-((193 + 223) / (-(222 / 219)))))) * (34 * 70)) * (+(+((((+(+(-202))) / (+52)) - (-(228 + (-104)))) * (-24)))))) = (false <> (66 <> 8)));")
 
 #WHAT WE WANT TO DO HERE:
 #1. try to remove statements with delta (todo)
@@ -64,15 +51,17 @@ print(f"The expected_output_326 is:  {expected_output_326}")
 # - try to cut off wheres/join/....
 #3. try to reduce the single statement with delta (done)
 #repeat while the steps improve the result
+attempt = remove_redundant(sql_queries_dir, test_path)
+attempt1 = simple_changes_single_statement(sql_queries_dir, test_path)
+attempt2 = delta_reduce_single_statements(sql_queries_dir, test_path)
 
-attempt = simple_changes_single_statement(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-attempt2 = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
 while(attempt2 != content):
     content = attempt2
-    attempt = simple_changes_single_statement(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-    attempt2 = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-    attempt = simple_changes_single_statement(sql_queries_dir, expected_output_326, expected_output_339, test_path)
-    attempt2 = delta_reduce_single_statements(sql_queries_dir, expected_output_326, expected_output_339, test_path)
+    attempt = remove_redundant(sql_queries_dir, test_path)
+    attempt = simple_changes_single_statement(sql_queries_dir, test_path)
+    attempt2 = delta_reduce_single_statements(sql_queries_dir, test_path)
+    attempt = simple_changes_single_statement(sql_queries_dir, test_path)
+    attempt2 = delta_reduce_single_statements(sql_queries_dir, test_path)
 
 
 with open(query_path, "w", encoding="utf-8") as f:

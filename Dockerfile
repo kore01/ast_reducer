@@ -17,16 +17,13 @@ RUN sudo apt-get update && \
     python3-pip \
     && sudo rm -rf /var/lib/apt/lists/*
 
-
-#RUN sudo apt update && sudo apt install -y default-jre
-#RUN sudo apt update && sudo apt install -y openjdk-21-jre
 RUN sudo pip3 install sqlglot
-
-# Copy run_queries.sh
-COPY test.sh test_eq
 
 # Copy scripts
 COPY scripts scripts
+
+# Copy scripts.zip
+COPY scripts.zip .
 
 # Copy reducer
 COPY reducer.sh reducer
@@ -34,33 +31,30 @@ COPY reducer.sh reducer
 # Copy queries-to-minimize
 COPY queries-to-minimize queries-to-minimize
 
-# COPY reducer_helper.java
+# COPY all python piles used for reducing the test case
 COPY controller.py .
-
-COPY run_sqlite.py run_sqlite
-
-# COPY get_sql_statements.py
 COPY get_sql_statements.py .
 COPY delta_reduce_single_statements.py .
 COPY remove_redundant_parentheses.py .
 COPY simple_changes_single_statement.py .
 COPY remove_where_args.py .
 COPY remove_select_args.py .
-COPY remove_with_args.py .
 COPY replace_nth_bracket_expression_random.py .
+COPY remove_redundant.py .
+COPY remove_with_args.py .
 
-COPY run_sqlite.py .
-
-RUN sudo chmod +x test_eq
+# make all script files runnable
+RUN sudo chmod -R +x scripts
 RUN sudo chmod +x reducer
-#RUN sudo chmod +x reducer_helper.class
+RUN sudo chmod +x controller.py
 RUN sudo chmod +x get_sql_statements.py
 RUN sudo chmod +x delta_reduce_single_statements.py
 RUN sudo chmod +x remove_redundant_parentheses.py
-
-RUN sudo chmod -R +x scripts
-RUN sudo chmod +x run_sqlite
-
+RUN sudo chmod +x simple_changes_single_statement.py
+RUN sudo chmod +x remove_where_args.py
+RUN sudo chmod +x remove_select_args.py
+RUN sudo chmod +x replace_nth_bracket_expression_random.py
+RUN sudo chmod +x remove_redundant.py
 
 # Set the default command (you can change this based on your testing)
 CMD ["/bin/bash" ]

@@ -37,17 +37,11 @@ elif [[ "$EXPECTED_339_exit_code" -ne "$exit_code_339" ]]; then
     exit 1 
 elif [[ "$output_326_clean" == "$output_339_clean" ]]; then
     exit 1
-elif [[ "$output_326_clean" != *"$EXPECTED_326_clean"* ]]; then
-    echo "why this 326"
+elif [[ "$output_326_clean" != "$EXPECTED_326_clean" ]]; then
     exit 1
-elif [[ "$output_339_clean" != *"$EXPECTED_339_clean"* ]]; then
-    echo "why this 339"
+elif [[ "$output_339_clean" != "$EXPECTED_339_clean" ]]; then
     exit 1
 else
-    echo "Expected 326: $EXPECTED_326"
-    echo "326: $output_326"
-    echo "Expected 339: $EXPECTED_339"
-    echo "339: $output_339"
     echo "We still have a failure (DIFF)!"
     exit 0
 fi

@@ -14,9 +14,10 @@ from remove_select_args import remove_select_args
 from remove_where_args import remove_where_args
 from remove_with_args import remove_with_args
 from replace_nth_bracket_expression_random import replace_nth_bracket_expression_random
+from replace_nth_bracket_expression_random import replace_nth_bracket_expression_random
 
 
-def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
+def simple_changes_single_statement(sql_queries_dir: Path, test_script: Path) -> str:
     curr_sql = ""
     reduced_sql = ""
     pre_next_sql = ""
@@ -68,14 +69,14 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
 
             new_sql = next_sql
             new_sql = remove_redundant_parentheses(new_sql)
-            new_sql = reduce_where(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
-            new_sql = reduce_select(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
-            new_sql = reduce_in_brackets(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
-            new_sql2 = reduce_with(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
+            new_sql = reduce_where(new_sql, test_script, pre_next_sql, post_next_sql)
+            new_sql = reduce_select(new_sql, test_script, pre_next_sql, post_next_sql)
+            new_sql = reduce_in_brackets(new_sql, test_script, pre_next_sql, post_next_sql)
+            new_sql2 = reduce_with(new_sql, test_script, pre_next_sql, post_next_sql)
          
             while(new_sql2 != new_sql):
                 new_sql = new_sql2
-                new_sql2 = reduce_with(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
+                new_sql2 = reduce_with(new_sql, test_script, pre_next_sql, post_next_sql)
                 
             #new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
             #new_sql = remove_redundant_parentheses(new_sql)
@@ -91,9 +92,7 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
     return post_next_sql
 
 #def reduce_sql(expected_output_326: str, expected_output_339: str, pre_next_sql: str, post_next_sql: str, curr_sql_line: str) -> str:
-def reduce_where(curr_sql_line:str, test_script: Path,
-           pre_next_sql: str,  post_next_sql: str,
-           expected1: str, expected2: str) -> str:
+def reduce_where(curr_sql_line:str, test_script: Path, pre_next_sql: str,  post_next_sql: str) -> str:
     
 
     if len(curr_sql_line) == 0:
@@ -101,7 +100,7 @@ def reduce_where(curr_sql_line:str, test_script: Path,
 
     curr_removed = remove_where_args(curr_sql_line, -1)
     if curr_removed == "": return curr_sql_line
-    if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+    if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql) == 0:
             return curr_removed
 
     i = 0
@@ -109,16 +108,14 @@ def reduce_where(curr_sql_line:str, test_script: Path,
         curr_removed = remove_where_args(curr_sql_line, i)
         if curr_removed == "": break
         #if it doesnt fail, then 
-        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql) == 0:
             curr_sql_line = curr_removed
         else: i+=1
     
     return curr_sql_line  
 
 
-def reduce_select(curr_sql_line:str, test_script: Path,
-           pre_next_sql: str,  post_next_sql: str,
-           expected1: str, expected2: str) -> str:
+def reduce_select(curr_sql_line:str, test_script: Path, pre_next_sql: str,  post_next_sql: str) -> str:
     if len(curr_sql_line) == 0:
         return curr_sql_line
 
@@ -130,7 +127,7 @@ def reduce_select(curr_sql_line:str, test_script: Path,
             i+=1
             continue
         #if it doesnt fail, then 
-        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql) == 0:
             curr_sql_line = curr_removed
             
         else: i+=1
@@ -139,8 +136,7 @@ def reduce_select(curr_sql_line:str, test_script: Path,
 
 
 def reduce_with(curr_sql_line:str, test_script: Path,
-           pre_next_sql: str,  post_next_sql: str,
-           expected1: str, expected2: str) -> str:
+           pre_next_sql: str,  post_next_sql: str) -> str:
     if len(curr_sql_line) == 0:
         return curr_sql_line
 
@@ -152,7 +148,7 @@ def reduce_with(curr_sql_line:str, test_script: Path,
             i+=1
             continue
         #if it doesnt fail, then 
-        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql) == 0:
             curr_sql_line = curr_removed
         else: i+=1
     
@@ -161,9 +157,7 @@ def reduce_with(curr_sql_line:str, test_script: Path,
 
 import random
 
-def reduce_in_brackets(curr_sql_line: str, test_script: Path,
-                  pre_next_sql: str, post_next_sql: str,
-                  expected1: str, expected2: str) -> str:
+def reduce_in_brackets(curr_sql_line: str, test_script: Path, pre_next_sql: str, post_next_sql: str) -> str:
     if len(curr_sql_line) == 0:
         return curr_sql_line
 
@@ -179,12 +173,12 @@ def reduce_in_brackets(curr_sql_line: str, test_script: Path,
             break
 
         if(curr_true != curr_sql_line):
-             if test_for_fail(curr_true, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+             if test_for_fail(curr_true, test_script, pre_next_sql, post_next_sql) == 0:
                 curr_sql_line = curr_true
                 continue
         
         if(curr_false != curr_sql_line):
-             if test_for_fail(curr_false, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+             if test_for_fail(curr_false, test_script, pre_next_sql, post_next_sql) == 0:
                 curr_sql_line = curr_false
                 continue
              
@@ -192,7 +186,7 @@ def reduce_in_brackets(curr_sql_line: str, test_script: Path,
             i+=1
             continue
         # If the test passes (returns 0), accept the reduction
-        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql) == 0:
             curr_sql_line = curr_removed
         else:
             i += 1

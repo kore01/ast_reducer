@@ -6,15 +6,11 @@ import re
 from pathlib import Path
 from typing import List
 
-import sqlglot
-from sqlglot.errors import TokenError, ParseError
-
 import tempfile
 
 from remove_redundant_parentheses import remove_redundant_parentheses
-from run_sqlite import run_sqlite
 
-def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
+def delta_reduce_single_statements(sql_queries_dir: Path, test_script: Path) -> str:
     curr_sql = ""
     reduced_sql = ""
     pre_next_sql = ""
@@ -29,12 +25,6 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
     )
     post_next_sql = ""
 
-    #print("try original_test")
-    #original_test = (sql_dir.parent / "original_test.sql").read_text(encoding='utf-8')
-
-    #if test_for_fail(original_test, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339) == 0:
-    #    print("Hello there")
-
     for i, curr_path in reversed(list(enumerate(query_files))):
 
         next_sql = curr_path.read_text(encoding='utf-8')
@@ -44,36 +34,21 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
             later_path = query_files[j]
             pre_next_sql = later_path.read_text(encoding='utf-8') + pre_next_sql
 
-        
-        #try to reduce the sql
-        if test_for_fail("", test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339) == 0:
-            new_sql = ""
+        new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, 1)
+        new_sql = remove_redundant_parentheses(new_sql)
+        if new_sql.strip().endswith(";"):
             post_next_sql = new_sql + post_next_sql
-            if not post_next_sql.endswith(";"):
-                post_next_sql = post_next_sql + ";"
-                
-            if os.path.isfile(curr_path):
-                os.remove(curr_path)
-            #print(f"reduced to empty: {new_sql}")
         else:
-            new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
-            new_sql = remove_redundant_parentheses(new_sql)
-            if new_sql.strip().endswith(";"):
-                post_next_sql = new_sql + post_next_sql
-            else:
-                post_next_sql = new_sql + ";\n" + post_next_sql
-                new_sql = new_sql + ";\n"
-            if not post_next_sql.endswith(";"):
-                post_next_sql = post_next_sql + ";"
+            post_next_sql = new_sql + ";\n" + post_next_sql
+            new_sql = new_sql + ";\n"
+        if not post_next_sql.endswith(";"):
+            post_next_sql = post_next_sql + ";"
 
-            curr_path.write_text(new_sql)
+        curr_path.write_text(new_sql)
 
     return post_next_sql
 
-#def reduce_sql(expected_output_326: str, expected_output_339: str, pre_next_sql: str, post_next_sql: str, curr_sql_line: str) -> str:
-def reduce(curr_sql_line:str, n: int, test_script: Path,
-           pre_next_sql: str,  post_next_sql: str,
-           expected1: str, expected2: str, depth: int) -> str:
+def reduce(curr_sql_line:str, n: int, test_script: Path, pre_next_sql: str,  post_next_sql: str, depth: int) -> str:
 
     if len(curr_sql_line) == 0:
         return curr_sql_line
@@ -87,20 +62,17 @@ def reduce(curr_sql_line:str, n: int, test_script: Path,
         delta = parts[i]
         comp = comps[i]
 
-        if test_for_fail(delta, test_script, pre_next_sql, post_next_sql,expected1, expected2) == 0:
-            if(depth > 46): return delta
-            return reduce(delta, 2, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
+        if test_for_fail(delta, test_script, pre_next_sql, post_next_sql) == 0:
+            if(depth > 66): return delta
+            return reduce(delta, 2, test_script, pre_next_sql, post_next_sql, depth+1)
 
-        if test_for_fail(comp, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
-            if(depth > 46): return comp
-            return reduce(comp, n - 1, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
-    return reduce(curr_sql_line, n * 2, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
+        if test_for_fail(comp, test_script, pre_next_sql, post_next_sql) == 0:
+            if(depth > 66): return comp
+            return reduce(comp, n - 1, test_script, pre_next_sql, post_next_sql, depth+1)
+    return reduce(curr_sql_line, n * 2, test_script, pre_next_sql, post_next_sql, depth+1)
 
 @lru_cache(maxsize=14124)
 def tokenize(sql: str) -> List[str]:
-    """
-    Simple SQL tokenizer: splits by whitespace and keeps punctuation separate.
-    """
     # This regex splits words and punctuation into tokens
     tokens = re.findall(r"\w+|[^\s\w]", sql)
     tokens = [tok for tok in tokens if tok != ';' and tok != '']
@@ -136,9 +108,7 @@ def comps_of_split(parts: List[str]) -> List[str]:
     return [" ".join(parts[:i] + parts[i+1:]) for i in range(len(parts))]
 
 @lru_cache(maxsize=14124)
-def test_for_fail(sql_query: str, test_script: Path,
-                  pre_next_sql: str, post_next_sql: str, 
-                  expected1: str | None, expected2: str | None) -> int:
+def test_for_fail(sql_query: str, test_script: Path, pre_next_sql: str, post_next_sql: str) -> int:
     if(sql_query == ""):
         curr_query = pre_next_sql +";" + post_next_sql
     elif(sql_query.endswith(";")):
@@ -172,6 +142,3 @@ def test_for_fail(sql_query: str, test_script: Path,
         print("Failed to convert output to int")
         print(f"Output was: {result.stdout}")
         raise
-    
-    
-    

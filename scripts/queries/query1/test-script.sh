@@ -5,7 +5,7 @@ QUERY="$1"
 
 EXPECTED_326=""
 #EXPECTED_339="Runtime error near line 2: NOT NULL constraint failed: F.p (19)"
-EXPECTED_339="NOT NULL constraint failed: F.p (19)"
+EXPECTED_339="NOT NULL constraint failed"
 
 EXPECTED_326_exit_code=0 
 EXPECTED_339_exit_code=1
@@ -17,20 +17,17 @@ exit_code_326=$?
 
 output_339=$(sqlite3-3.39.4 < "$QUERY" 2>&1)
 exit_code_339=$?
-echo "$QUERY"
-echo "Expected 326: $EXPECTED_326"
-echo "326: $output_326"
-echo "Expected 339: $EXPECTED_339"
-echo "339: $output_339"
 
-echo "$exit_code_339"
+#echo "$QUERY"
+#echo "Expected 326: $EXPECTED_326"
+#echo "326: $output_326"
+#echo "Expected 339: $EXPECTED_339"
+#echo "339: $output_339"
 
 # Explanation of the if clauses:
 # 1 and 2: exit codes of the original_test output should be equal to the new outputs
 # 3: the outputs should differ between output_326 and output_339
 # 4 - 5: similarly if the outputs of the two versions changed compared to the old one (original_test) this is also bad
-
-
 if [[ "$EXPECTED_326_exit_code" -ne "$exit_code_326" ]]; then
     exit 1 
 elif [[ "$EXPECTED_339_exit_code" -ne "$exit_code_339" ]]; then
@@ -39,9 +36,7 @@ elif [[ "$output_326" == "$output_339" ]]; then
     exit 1
 elif [[ "$output_326" != "$EXPECTED_326" ]]; then
     exit 1
-elif [[ "$output_339" == *"NOT NULL constraint failed"* ]]; then
-    exit 0
-elif [[ "$output_339" != "$EXPECTED_339" ]]; then
+elif [[ "$output_339" != *"$EXPECTED_339"* ]]; then
     exit 1
 else
     echo "We still have a failure (DIFF)!"

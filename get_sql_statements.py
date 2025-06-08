@@ -10,7 +10,7 @@ def get_sql_statements(input_path):
     with input_path.open("r", encoding="utf-8") as f:
         content = f.read()
 
-    # Split queries on semicolon followed by *space or newline only*
+    # Split queries on semicolon followed by space or newline only!!!
     queries = [q.strip() for q in re.split(r';(?= |\n)', content) if q.strip()]
 
     # Create output directory under the parent of the input file
@@ -24,7 +24,3 @@ def get_sql_statements(input_path):
             f.write(query + ";\n")
 
     print(f"Done! Queries written to '{output_dir}'.")
-
-
-if __name__ == "__main__":
-    get_sql_statements(sys.argv[1])

@@ -32,6 +32,3 @@ fi
 QUERY_FILE_real=$(realpath "$QUERY_FILE")
 
 python3 controller.py "$QUERY_FILE_real" "$TEST_SCRIPT"
-
-
-#sudo java reducer_helper "$QUERY_FILE_real" "$TEST_SCRIPT"
