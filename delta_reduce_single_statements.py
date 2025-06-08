@@ -109,6 +109,7 @@ def reduce(curr_sql_line:str, n: int, test_script: Path,
     for i in range(len(parts)):
         delta = parts[i]
         comp = comps[i]
+        if(delta == " "): continue
 
         if test_for_fail(delta, test_script, pre_next_sql, post_next_sql,expected1, expected2) == 0:
             if(depth > 46): return delta
@@ -123,14 +124,25 @@ def reduce(curr_sql_line:str, n: int, test_script: Path,
     #if(depth > 6): return curr_sql_line
     return reduce(curr_sql_line, n * 2, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
 
-
+@lru_cache(maxsize=14124)
 def tokenize(sql: str) -> List[str]:
     """
-    Simple SQL tokenizer: splits by whitespace and keeps punctuation separate.
+    Robust SQL tokenizer:
+    - Normalizes whitespace.
+    - Splits words and punctuation.
+    - Ensures '*' is always a separate token, even if written like 'SELECT*'.
     """
-    # This regex splits words and punctuation into tokens
-    tokens = re.findall(r"\w+|[^\s\w]", sql)
+    # Normalize whitespace
+    sql = re.sub(r'\s+', ' ', sql.strip())
+
+    # Force space between SELECT* or any word immediately joined with *
+    sql = re.sub(r'(\w)\*', r'\1 *', sql)
+    sql = re.sub(r'\*(\w)', r'* \1', sql)
+
+    # Tokenize into words and punctuation
+    tokens = re.findall(r'\w+|[^\s\w]', sql)
     tokens = [tok for tok in tokens if tok != ';' and tok != '']
+
     return tokens
 
 def split_token_aware(curr_sql_line: str, n: int) -> List[str]:
@@ -157,8 +169,8 @@ def split_token_aware(curr_sql_line: str, n: int) -> List[str]:
                 # punctuation, append directly
                 part += t
         if(part.strip()): parts.append(part.strip())
-    #print("PARTS")
-    #print(parts)
+    print("PARTS")
+    print(parts)
     return parts
 
 def comps_of_split(parts: List[str]) -> List[str]:
@@ -173,7 +185,7 @@ def test_for_fail(sql_query: str, test_script: Path,
     elif(sql_query.endswith(";")):
         curr_query = pre_next_sql + sql_query + post_next_sql
         try:
-            parsed = sqlglot.parse_one(sql_query)
+            parsed = sqlglot.parse_one(sql_query, read = 'sqlite3')
             # If no exception: SQL is valid!
         except AttributeError as e:
             print(f"Ignoring AttributeError on: {e}")
@@ -186,7 +198,7 @@ def test_for_fail(sql_query: str, test_script: Path,
     else:
         curr_query = pre_next_sql + sql_query +";" + post_next_sql
         try:
-            parsed = sqlglot.parse_one(sql_query)
+            parsed = sqlglot.parse_one(sql_query, read = 'sqlite3')
             # If no exception: SQL is valid!
         except AttributeError as e:
             print(f"Ignoring AttributeError on: {e}")

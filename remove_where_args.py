@@ -18,18 +18,19 @@ def remove_where_args(sql: str, index: int) -> str:
         else:
             return [expr]
 
-    # Parse the original SQL
-    print("ALL NOT GOOD")
+
+    
     try:
         tree = parse_one(sql)
     except Exception as e:
-        print("WHY DO YOU DO THIS")
         print(e)
         return ""
-    print("ALL KINDA GOOD")
     where_clause = tree.find(exp.Where)
-    print("ALL GOOD")
-
+    if where_clause:
+        if index == -1:
+        # Remove entire WHERE clause
+            tree.set("where", None)
+            return tree.sql()
     if not where_clause:
         return ""
         raise ValueError("No WHERE clause found.")
@@ -58,4 +59,4 @@ def remove_where_args(sql: str, index: int) -> str:
     else:
         tree.set("where", None)
 
-    return tree.sql()
+    return tree.sql(pretty=False, dialect='sqlite').replace("SELECT *", "SELECT*")

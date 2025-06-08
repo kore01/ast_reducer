@@ -12,6 +12,7 @@ from delta_reduce_single_statements import test_for_fail
 from remove_redundant_parentheses import remove_redundant_parentheses
 from remove_select_args import remove_select_args
 from remove_where_args import remove_where_args
+from replace_nth_bracket_expression_random import replace_nth_bracket_expression_random
 
 
 def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: str, expected_output_339: str, test_script: Path) -> str:
@@ -67,6 +68,7 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
             new_sql = remove_redundant_parentheses(new_sql)
             new_sql = reduce_where(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
             new_sql = reduce_select(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
+            new_sql = reduce_in_brackets(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
             #new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
             #new_sql = remove_redundant_parentheses(new_sql)
             if new_sql.strip().endswith(";"):
@@ -104,6 +106,11 @@ def reduce_where(curr_sql_line:str, test_script: Path,
         return curr_sql_line
 
     print("REDUCE WHERE")    
+    curr_removed = remove_where_args(curr_sql_line, -1)
+    if curr_removed == "": return curr_sql_line
+    if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+            return curr_removed
+
     i = 0
     while(1):
         curr_removed = remove_where_args(curr_sql_line, i)
@@ -120,15 +127,12 @@ def reduce_where(curr_sql_line:str, test_script: Path,
 def reduce_select(curr_sql_line:str, test_script: Path,
            pre_next_sql: str,  post_next_sql: str,
            expected1: str, expected2: str) -> str:
-    
-
     if len(curr_sql_line) == 0:
         return curr_sql_line
 
     print("REDUCE SELECT")    
     i = 0
     while(1):
-        print (i)
         curr_removed = remove_select_args(curr_sql_line, i)
         if curr_removed == "": break
         #if it doesnt fail, then 
@@ -138,6 +142,36 @@ def reduce_select(curr_sql_line:str, test_script: Path,
         else: i+=1
     
     return curr_sql_line  
+
+
+import random
+
+def reduce_in_brackets(curr_sql_line: str, test_script: Path,
+                  pre_next_sql: str, post_next_sql: str,
+                  expected1: str, expected2: str) -> str:
+    if len(curr_sql_line) == 0:
+        return curr_sql_line
+
+    print("REDUCE SELECT")    
+    i = 0
+    while True:
+        try:
+            curr_removed = replace_nth_bracket_expression_random(curr_sql_line, i)
+        except IndexError:
+            # No more bracket expressions at index i
+            break
+
+        if curr_removed == "":
+            break
+
+        # If the test passes (returns 0), accept the reduction
+        if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
+            curr_sql_line = curr_removed
+            print("EXTREME SUCCESS")
+        else:
+            i += 1
+
+    return curr_sql_line
 
    
 
