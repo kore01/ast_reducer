@@ -4,7 +4,7 @@
 QUERY="$1"
 
 #EXPECTED="Error: near line 534: database disk image is malformed"
-EXPECTED="database disk image is malformed"
+EXPECTED_PATTERN="^Error: near line [0-9]+: database disk image is malformed$"
 
 EXPECTED_exit_code=1
 
@@ -24,10 +24,10 @@ exit_code_new=$?
 
 # Explanation of the if clauses:
 #1: if the exit codes are not equal than it is not the same crash (this should probably be enough tbf)
-#2: if not the second one just checks if the output is the same (or not)
+#2: if not the second one just checks if the output is the same (or not) based on the error pattern given
 if [[ "$exit_code_new" -ne "$EXPECTED_exit_code" ]]; then
     exit 1
-elif [[ "$output_new" != *"$EXPECTED"* ]]; then
+elif ! printf "%s" "$output_new" | grep -Pqz "$EXPECTED_PATTERN"; then 
     exit 1
 else
 	echo "We still have a failure (CRASH)!"
