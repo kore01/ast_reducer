@@ -33,12 +33,6 @@ def simple_changes_single_statement(sql_queries_dir: Path, test_script: Path) ->
     )
     post_next_sql = ""
 
-    #print("try original_test")
-    #original_test = (sql_dir.parent / "original_test.sql").read_text(encoding='utf-8')
-
-    #if test_for_fail(original_test, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339) == 0:
-    #    print("Hello there")
-
     for i, curr_path in reversed(list(enumerate(query_files))):
 
         next_sql = curr_path.read_text(encoding='utf-8')

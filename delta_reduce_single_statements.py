@@ -117,27 +117,19 @@ def test_for_fail(sql_query: str, test_script: Path, pre_next_sql: str, post_nex
         curr_query = pre_next_sql+";" + sql_query +";" + post_next_sql
        
     try:
-        with tempfile.NamedTemporaryFile(mode="w+", suffix=".sql", delete=False) as tmp_file:
-            #tmp_file.write(curr_query)
-            tmp_file.write(curr_query)
-            tmp_file.flush()
-            tmp_path = Path(tmp_file.name)
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            query_path = Path(tmp_dir) / "query.sql"
+            query_path.write_text(curr_query)
 
-            # Set env var TEST_CASE_LOCATION to tmp_path
-            env = os.environ.copy()
-            env["TEST_CASE_LOCATION"] = str(tmp_path)
-
-            # Use tmp_path in your subprocess
             result = subprocess.run(
                 [str(test_script)],
+                cwd=tmp_dir,  # run test script inside the temp dir
                 capture_output=True,
                 text=True,
                 check=False
             )
 
-            tmp_path.unlink()
-        
-        return result.returncode
+            return result.returncode
     except subprocess.CalledProcessError as e:
         print(f"Script failed with return code {e.returncode}")
         print(f"stderr: {e.stderr}")
