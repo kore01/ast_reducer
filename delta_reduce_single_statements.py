@@ -34,17 +34,17 @@ def delta_reduce_single_statements(sql_queries_dir: Path, test_script: Path) -> 
             later_path = query_files[j]
             pre_next_sql = later_path.read_text(encoding='utf-8') + pre_next_sql
 
-            new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, 1)
-            new_sql = remove_redundant_parentheses(new_sql)
-            if new_sql.strip().endswith(";"):
-                post_next_sql = new_sql + post_next_sql
-            else:
-                post_next_sql = new_sql + ";\n" + post_next_sql
-                new_sql = new_sql + ";\n"
-            if not post_next_sql.endswith(";"):
-                post_next_sql = post_next_sql + ";"
+        new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, 1)
+        new_sql = remove_redundant_parentheses(new_sql)
+        if new_sql.strip().endswith(";"):
+            post_next_sql = new_sql + post_next_sql
+        else:
+            post_next_sql = new_sql + ";\n" + post_next_sql
+            new_sql = new_sql + ";\n"
+        if not post_next_sql.endswith(";"):
+            post_next_sql = post_next_sql + ";"
 
-            curr_path.write_text(new_sql)
+        curr_path.write_text(new_sql)
 
     return post_next_sql
 
