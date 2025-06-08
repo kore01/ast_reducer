@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # new test case
-QUERY="$1"
+QUERY=${TEST_CASE_LOCATION:-query.sql}
 
 #EXPECTED="Error: near line 534: database disk image is malformed"
 EXPECTED_PATTERN="^Error: near line [0-9]+: database disk image is malformed$"

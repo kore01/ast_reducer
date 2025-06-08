@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # new test case
-QUERY="$1"
+QUERY=${TEST_CASE_LOCATION:-query.sql}
 
 #EXPECTED_326="1|2025-06-01 12:15:55"
 EXPECTED_326_PATTERN='^1\|[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'

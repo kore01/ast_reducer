@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # new test case
-QUERY="$1"
+QUERY=${TEST_CASE_LOCATION:-query.sql}
 
 #EXPECTED="Segmentation fault (core dumped)"
 EXPECTED_exit_code=139

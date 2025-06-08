@@ -123,9 +123,13 @@ def test_for_fail(sql_query: str, test_script: Path, pre_next_sql: str, post_nex
             tmp_file.flush()
             tmp_path = Path(tmp_file.name)
 
+            # Set env var TEST_CASE_LOCATION to tmp_path
+            env = os.environ.copy()
+            env["TEST_CASE_LOCATION"] = str(tmp_path)
+
             # Use tmp_path in your subprocess
             result = subprocess.run(
-                [str(test_script), str(tmp_path)],
+                [str(test_script)],
                 capture_output=True,
                 text=True,
                 check=False

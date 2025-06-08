@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # new test case
-QUERY="$1"
+QUERY=${TEST_CASE_LOCATION:-query.sql}
 
 EXPECTED_326="56.52|0|66.16|2013-06-17|48\||"
 

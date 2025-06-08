@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # new test case
-QUERY="$1"
+QUERY=${TEST_CASE_LOCATION:-query.sql}
 
 EXPECTED_326=""
 #EXPECTED_339="Runtime error near line 2: NOT NULL constraint failed: F.p (19)"
