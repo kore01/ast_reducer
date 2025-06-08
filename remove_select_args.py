@@ -37,4 +37,4 @@ def remove_select_args(sql: str, index: int) -> str:
         # If no select expressions left, remove them all (empty SELECT)
          select.set("expressions", [exp.Star()])
 
-    return tree.sql(pretty=False, dialect='sqlite').replace("SELECT *", "SELECT*")
+    return tree.sql(pretty=True, dialect='sqlite').replace("SELECT *", "SELECT*")

@@ -1,12 +1,9 @@
 CREATE TABLE tbl_wqiwo (icol_dhwup INTEGER, rcol_eitnk REAL DEFAULT 55001.080638557934, tcol_yqthy TEXT, rcol_bjzii REAL, icol_jcscw INTEGER, tcol_wskpp);
-INSERT OR ABORT INTO tbl_wqiwo (rcol_eitnk, tcol_wskpp, tcol_yqthy) VALUES (1.0, 11960.180152676927, CAST('v_citjr' GLOB 'rAag' AS TEXT)), (CAST(UNLIKELY(- (NULL)) / NULLIF(0,0) AS REAL), 3802.849483805112, 1), (CAST(PRINTF('%.6e', -60733.41165606832 != -54381.10564306702) AS REAL), 8446, 'v_bwaja'), (24227.630527005007, 999999999999999999999999999999999999999999999999999999999999999999999999, 'v_fgzuu');
+INSERT OR ABORT INTO tbl_wqiwo (rcol_eitnk, tcol_wskpp, tcol_yqthy) VALUES (1.0, 11960.180152676927, CAST('v_citjr' GLOB 'rAag' AS TEXT)), (CAST(UNLIKELY(-  TRUE ) / NULLIF(0, 0) AS REAL), 3802.849483805112, 1), (CAST(PRINTF('%.6E', True) AS REAL), 8446, 'v_bwaja'), (24227.630527005007, 999999999999999999999999999999999999999999999999999999999999999999999999, 'v_fgzuu');
 SELECT* FROM tbl_wqiwo;
-UPDATE tbl_wqiwo SET icol_dhwup = 9311 > 2147483647, tcol_yqthy = 'v_aoejl', rcol_eitnk = 71845.46360526158, icol_jcscw = 2147483647, rcol_bjzii = COALESCE(-3291.7236589661334 / 68833.1535968991, 52344.8204190307), tcol_wskpp = 2147483647 WHERE tbl_wqiwo.icol_dhwup BETWEEN -8279 AND 0;
 ALTER TABLE tbl_wqiwo ADD COLUMN icol_ovpnc INTEGER;
-WITH with_vysww AS (SELECT * FROM tbl_wqiwo WHERE ((EXISTS(SELECT SUM(COALESCE(NULL, CAST(tbl_wqiwo.icol_ovpnc <> -551 AS FLOAT))) FROM tbl_wqiwo WHERE (tbl_wqiwo.icol_ovpnc IN (1, 1, 1, 1) AND NOT tbl_wqiwo.tcol_yqthy IS NULL)) OR tbl_wqiwo.tcol_yqthy LIKE 'v_hkpkj') AND EXISTS(SELECT 1 FROM tbl_wqiwo WHERE tbl_wqiwo.icol_dhwup IS NULL)) ORDER BY tbl_wqiwo.tcol_wskpp), with_ekqzi AS (SELECT * FROM with_vysww WHERE with_vysww.icol_jcscw <> 5472), with_kepqw AS (SELECT * FROM with_vysww GROUP BY with_vysww.icol_ovpnc ORDER BY with_vysww.rcol_bjzii) SELECT * FROM with_kepqw;
-CREATE TABLE tbl_leebq (icol_lpfht INTEGER, tcol_mlyky TEXT);
-INSERT OR FAIL INTO tbl_leebq VALUES (ABS(-7681), 'v_hbrey'), (CAST(PRINTF('%d', COALESCE(NULL, NULL, 6773)) AS INTEGER), CAST(TRIM('v_brdvm', 'P') < 'v_mpfhu' AS TEXT)), (CAST(CAST(TRIM(CAST(3185 AS TEXT), 'n') AS REAL) AS INTEGER), 'v_syzps'), (-7634, CAST('v_sgasq' - -9223372036854775808 AS TEXT)), (552, 'v_afgko');
-CREATE TRIGGER trg_nhmai AFTER DELETE ON tbl_wqiwo  BEGIN UPDATE tbl_wqiwo SET tcol_vwipe = 'v_rvcwt', icol_dhwup = -5799;
-END;
-SELECT tbl_leebq.icol_lpfht FROM tbl_leebq;
+WITH with_vysww AS( SELECT* FROM tbl_wqiwo ORDER BY tcol_wskpp), with_ekqzi AS( SELECT*), with_kepqw AS( SELECT* FROM with_vysww GROUP BY icol_ovpnc ORDER BY with_vysww. rcol_bjzii) SELECT* FROM with_kepqw;
+CREATE TABLE tbl_leebq( icol_lpfht, TEXT);
+INSERT OR FAIL INTO tbl_leebq VALUES (ABS(-7681), 'v_hbrey'), (CAST(PRINTF('%d', COALESCE(NULL, NULL, 6773)) AS INTEGER), CAST(TRIM('V_BRDVM', 'P') < 'v_mpfhu' AS TEXT)), (CAST(CAST(TRIM(CAST(3185 AS TEXT), 'n') AS REAL) AS INTEGER), 'v_syzps'), (-7634, CAST('v_sgasq' - -9223372036854775808 AS TEXT)), (552, 'V_AFGKO');
+SELECT tbl_leebq. icol_lpfht FROM tbl_leebq;
 ;

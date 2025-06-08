@@ -46,6 +46,7 @@ COPY remove_redundant_parentheses.py .
 COPY simple_changes_single_statement.py .
 COPY remove_where_args.py .
 COPY remove_select_args.py .
+COPY remove_with_args.py .
 COPY replace_nth_bracket_expression_random.py .
 
 COPY run_sqlite.py .
