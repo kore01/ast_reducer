@@ -5,7 +5,6 @@ from pathlib import Path
 from delta_reduce_single_statements import delta_reduce_single_statements
 from get_sql_statements import get_sql_statements
 
-from run_sqlite import run_sqlite
 from simple_changes_single_statement import simple_changes_single_statement
 from remove_redundant import remove_redundant
 

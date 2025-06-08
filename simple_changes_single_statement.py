@@ -50,7 +50,7 @@ def simple_changes_single_statement(sql_queries_dir: Path, test_script: Path) ->
 
         
         #try to reduce the sql
-        if test_for_fail("", test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339) == 0:
+        if test_for_fail("", test_script, pre_next_sql, post_next_sql) == 0:
             new_sql = ""
             post_next_sql = new_sql + post_next_sql
             if not post_next_sql.endswith(";"):
