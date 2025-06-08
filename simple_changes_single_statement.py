@@ -22,7 +22,7 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
     pre_next_sql = ""
     post_next_sql = ""
     save_reduced_curr_sql = ""
-    print("RUNNING SINGLE STATEMENTS SQLBLOP")
+    #print("RUNNING SINGLE STATEMENTS SQLBLOP")
 
     # Find all matching query_*.sql files
     sql_dir = sql_queries_dir
@@ -57,21 +57,26 @@ def simple_changes_single_statement(sql_queries_dir: Path, expected_output_326: 
                 
             if os.path.isfile(curr_path):
                 os.remove(curr_path)
-            print(f"reduced to empty: {new_sql}")
+            #print(f"reduced to empty: {new_sql}")
             
+        
         else:
+            # Replace hex numbers like 0x123abc
+            #next_sql = re.sub(r"0x[0-9a-fA-F]+", "0", next_sql)
+            # Replace binary blobs like x'FF'
+            #next_sql = re.sub(r"[xX]'[0-9a-fA-F]*'", "'BLOB'", next_sql)
+
             new_sql = next_sql
             new_sql = remove_redundant_parentheses(new_sql)
             new_sql = reduce_where(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
             new_sql = reduce_select(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
             new_sql = reduce_in_brackets(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
             new_sql2 = reduce_with(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
-            print(new_sql2)
+         
             while(new_sql2 != new_sql):
                 new_sql = new_sql2
                 new_sql2 = reduce_with(new_sql, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339)
-                print("NEW")
-                print(new_sql2)
+                
             #new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
             #new_sql = remove_redundant_parentheses(new_sql)
             if new_sql.strip().endswith(";"):

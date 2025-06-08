@@ -54,7 +54,7 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
                 
             if os.path.isfile(curr_path):
                 os.remove(curr_path)
-            print(f"reduced to empty: {new_sql}")
+            #print(f"reduced to empty: {new_sql}")
         else:
             new_sql = reduce(next_sql, 2, test_script, pre_next_sql, post_next_sql, expected_output_326, expected_output_339, 1)
             new_sql = remove_redundant_parentheses(new_sql)
@@ -143,33 +143,9 @@ def test_for_fail(sql_query: str, test_script: Path,
         curr_query = pre_next_sql +";" + post_next_sql
     elif(sql_query.endswith(";")):
         curr_query = pre_next_sql+";" + sql_query +";" + post_next_sql
-        try:
-            parsed = sqlglot.parse_one(sql_query, read = 'sqlite')
-            # If no exception: SQL is valid!
-        except AttributeError as e:
-            print(f"Ignoring AttributeError on: {e}")
-            # continue the function, don't return
-        except TokenError as e:
-            print(f"Ignoring TokenError on: {e}")
-        except ParseError as e:
-            #print()
-            #print(f"Invalid SQL detected: {sql_query} -- {e}")
-            return 1  # or whatever you normally do
     else:
         curr_query = pre_next_sql+";" + sql_query +";" + post_next_sql
-        try:
-            parsed = sqlglot.parse_one(sql_query, read = 'sqlite')
-            # If no exception: SQL is valid!
-        except AttributeError as e:
-            print(f"Ignoring AttributeError on: {e}")
-            # continue the function, don't return
-        except TokenError as e:
-            print(f"Ignoring TokenError on: {e}")
-        except ParseError as e:
-            #print()
-            #print(f"Invalid SQL detected: {sql_query} -- {e}")
-            return 1  # or whatever you normally do
-
+       
     try:
         with tempfile.NamedTemporaryFile(mode="w+", suffix=".sql", delete=False) as tmp_file:
             #tmp_file.write(curr_query)

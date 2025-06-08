@@ -30,7 +30,7 @@ def remove_where_args(sql: str, index: int) -> str:
 
     if where_clause and select_node and index == -1:
         select_node.set("where", None)
-        return tree.sql(pretty=True, dialect='sqlite').replace("SELECT *", "SELECT*")
+        return tree.sql(pretty=False, dialect='sqlite').replace("SELECT *", "SELECT*")
     if not where_clause:
         return ""
         raise ValueError("No WHERE clause found.")
@@ -59,7 +59,7 @@ def remove_where_args(sql: str, index: int) -> str:
     else:
         tree.set("where", None)
 
-    return tree.sql(pretty=True, dialect='sqlite').replace("SELECT *", "SELECT*")
+    return tree.sql(pretty=False, dialect='sqlite').replace("SELECT *", "SELECT*")
 
 
 print(remove_where_args("INSERT INTO F SELECT * FROM (VALUES ((NOT false), false), (NULL, (NOT (NOT true)))) AS L WHERE (((+(+(-((+110) / (+((-(-150)) * ((247 * (91 * (-47))) + (-86)))))))) = ((((+(+(24 / (+((+89) * (+58)))))) * (-(-((193 + 223) / (-(222 / 219)))))) * (34 * 70)) * (+(+((((+(+(-202))) / (+52)) - (-(228 + (-104)))) * (-24)))))) = (false <> (66 <> 8)));", -1))

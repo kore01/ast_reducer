@@ -5,7 +5,11 @@ from sqlglot import parse_one, exp
 
 def remove_with_args(sql: str, index: int) -> str:
     # Parse the SQL into an AST
-    expression = parse_one(sql, dialect = 'sqlite')
+    try: 
+        expression = parse_one(sql, dialect = 'sqlite')
+    except sqlglot.errors.ParseError:
+            return ""
+
     index-=1
 
     if not isinstance(expression, exp.With):
@@ -19,13 +23,19 @@ def remove_with_args(sql: str, index: int) -> str:
     else:
         with_expr = expression
 
+    def is_valid_sql(sql: str) -> bool:
+        try:
+            parse_one(sql)
+            return True
+        except sqlglot.errors.ParseError:
+            return False
+
     # Get the list of CTEs
     ctes = with_expr.expressions
     #print(ctes)
     #print(len(ctes))
 
     if index < 0 or index >= len(ctes):
-        print("WHAT")
         return ""
         raise IndexError(f"CTE index {index} out of range (found {len(ctes)} CTEs)")
 
@@ -41,16 +51,12 @@ def remove_with_args(sql: str, index: int) -> str:
     else:
         # Reassign updated CTEs
         with_expr.set("expressions", ctes)
-    
-    print(expression.sql(pretty=True, dialect='sqlite').replace("SELECT *", "SELECT*"))
-    return expression.sql(pretty=True, dialect='sqlite').replace("SELECT *", "SELECT*")
 
-query_path = os.path.realpath(sys.argv[0])
-query_path = os.path.join(os.path.dirname(query_path), "queries-to-minimize/queries/query16/sql_queries/query_2.sql")
-print(query_path)
-#os.path.join(os.path.dirname(query_path), "result_query.sql")
-with open(query_path, "r", encoding="utf-8") as f:
-    content = f.read()
-#print(content)
+    output = expression.sql(pretty=False, dialect='sqlite').replace("SELECT *", "SELECT*")
+    
+    #print(expression.sql(pretty=True, dialect='sqlite').replace("SELECT *", "SELECT*"))
+    return output
+
 sql = 'WITH temp AS (SELECT a, b, c FROM t) SELECT x, y, z FROM main;'
 print(remove_with_args(sql, 1))
+
