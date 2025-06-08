@@ -21,8 +21,6 @@ print(f"Reading: {query_path}")
 
 with open(query_path, "r", encoding="utf-8") as f:
     content = f.read()
-    print(content)
-
 
 #separate query into separate files
 # Path to your SQL file

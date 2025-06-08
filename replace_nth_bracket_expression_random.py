@@ -31,6 +31,7 @@ def safe_eval(expr: str):
         return None
 
 def replace_nth_bracket_expression_random(sql: str, index: int) -> str:
+    #print(sql)
     positions = []
     stack = []
 
@@ -48,6 +49,8 @@ def replace_nth_bracket_expression_random(sql: str, index: int) -> str:
 
     start, end = positions[index]
     original_expr = sql[start:end]
+    
+    #print(original_expr)
 
     inner = original_expr[1:-1].strip()
 
@@ -69,12 +72,8 @@ def replace_nth_bracket_expression_random(sql: str, index: int) -> str:
             return sql
         new_expr = random.choice(inner_parts)
 
-    # 10% chance to replace with TRUE or FALSE randomly
-    if random.random() < 0.1:
-        new_expr = random.choice(['TRUE', 'FALSE'])
-
-    return sql[:start] + new_expr + sql[end:]
+    return sql[:start] + new_expr + sql[end:], sql[:start] + ' TRUE ' + sql[end:], sql[:start] + ' FALSE ' + sql[end:]
 
 # Test
-sql = "INSERT INTO V SELECT* FROM( VALUES(( NULL), false),( NULL, NULL)) WHERE(( false< true)>( NOT true));"
-print(replace_nth_bracket_expression_random(sql, 4))
+sql = "INSERT INTO F SELECT* FROM( VALUES( True, False),( NULL, TRUE)) WHERE((( 110/( 150))=- 0)=( false<>( 66<> 8)));"
+print(replace_nth_bracket_expression_random(sql, 5))

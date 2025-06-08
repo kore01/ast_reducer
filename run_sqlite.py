@@ -26,7 +26,7 @@ def run_sqlite(version: str, sql_content: str) -> str:
         tmp_sql_path.unlink(missing_ok=True)
 
     # Debug logging
-    print(f"[DEBUG] exit code: {exit_code}")
-    print(f"[DEBUG] output:\n{output}")
+    #print(f"[DEBUG] exit code: {exit_code}")
+    #print(f"[DEBUG] output:\n{output}")
 
     return f"[EXIT CODE:{exit_code}]\n{output}"

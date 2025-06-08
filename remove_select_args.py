@@ -15,18 +15,17 @@ def remove_select_args(sql: str, index: int) -> str:
     try:
         tree = parse_one(sql)
     except Exception as e:
-        print("Failed to parse SQL:", e)
+        #print("Failed to parse SQL:", e)
         return ""
 
     select = tree.find(exp.Select)
     if not select:
-        print("No SELECT clause found.")
+        #print("No SELECT clause found.")
         return ""
 
     expressions = select.expressions
     if index < 0 or index >= len(expressions):
-        print(index)
-        print("Index out of range for SELECT expressions.")
+        #print("Index out of range for SELECT expressions.")
         return ""
 
     # Remove the selected expression

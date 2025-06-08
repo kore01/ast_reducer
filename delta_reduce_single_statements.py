@@ -20,7 +20,6 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
     pre_next_sql = ""
     post_next_sql = ""
     save_reduced_curr_sql = ""
-    print("RUNNING SINGLE STATEMENTS DELTA")
 
     # Find all matching query_*.sql files
     sql_dir = sql_queries_dir
@@ -39,10 +38,6 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
     for i, curr_path in reversed(list(enumerate(query_files))):
 
         next_sql = curr_path.read_text(encoding='utf-8')
-        
-        print(f"curr_sql: {next_sql}")
-
-
         # Collect post_next_sql from all later files
         pre_next_sql = ""
         for j in range(i-1, -1, -1):
@@ -59,7 +54,6 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
                 
             if os.path.isfile(curr_path):
                 os.remove(curr_path)
-            print(curr_path)
             print(f"reduced to empty: {new_sql}")
             #curr_path.write_text("")
         else:
@@ -69,25 +63,12 @@ def delta_reduce_single_statements(sql_queries_dir: Path, expected_output_326: s
                 post_next_sql = new_sql + post_next_sql
             else:
                 post_next_sql = new_sql + ";\n" + post_next_sql
+                new_sql = new_sql + ";\n"
             if not post_next_sql.endswith(";"):
                 post_next_sql = post_next_sql + ";"
 
-            print(f"post_next_sql: {post_next_sql}")
-
-            #print(f"new_sql: {new_sql}")
             curr_path.write_text(new_sql)
 
-        #print(f"post_next_sql: {post_next_sql}")
-
-        #if next_sql.strip().endswith(";"):
-        #    if(new_sql == ""):
-        #    post_next_sql = new_sql + post_next_sql
-        #else:
-        #    post_next_sql = new_sql + post_next_sql
-        #pre_next_sql += '\n' + reduced_sql
-    
-    #print(post_next_sql)
-    #print(f"Reduced query: {post_next_sql}")
     return post_next_sql
 
 #def reduce_sql(expected_output_326: str, expected_output_339: str, pre_next_sql: str, post_next_sql: str, curr_sql_line: str) -> str:
@@ -103,24 +84,17 @@ def reduce(curr_sql_line:str, n: int, test_script: Path,
 
     parts = split_token_aware(curr_sql_line, n)
     comps = comps_of_split(parts)
-    #print(parts)
-    #print(comps)
-
     for i in range(len(parts)):
         delta = parts[i]
         comp = comps[i]
 
         if test_for_fail(delta, test_script, pre_next_sql, post_next_sql,expected1, expected2) == 0:
             if(depth > 46): return delta
-            #return delta
-            #print("FAIL 1")
             return reduce(delta, 2, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
 
         if test_for_fail(comp, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
             if(depth > 46): return comp
             return reduce(comp, n - 1, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
-    #print("FAIL 3")
-    #if(depth > 6): return curr_sql_line
     return reduce(curr_sql_line, n * 2, test_script, pre_next_sql, post_next_sql, expected1, expected2, depth+1)
 
 @lru_cache(maxsize=14124)
@@ -157,8 +131,6 @@ def split_token_aware(curr_sql_line: str, n: int) -> List[str]:
                 # punctuation, append directly
                 part += t
         if(part.strip()): parts.append(part.strip())
-    #print("PARTS")
-    #print(parts)
     return parts
 
 def comps_of_split(parts: List[str]) -> List[str]:
@@ -169,9 +141,9 @@ def test_for_fail(sql_query: str, test_script: Path,
                   pre_next_sql: str, post_next_sql: str, 
                   expected1: str | None, expected2: str | None) -> int:
     if(sql_query == ""):
-        curr_query = pre_next_sql + post_next_sql
+        curr_query = pre_next_sql +";" + post_next_sql
     elif(sql_query.endswith(";")):
-        curr_query = pre_next_sql + sql_query + post_next_sql
+        curr_query = pre_next_sql+";" + sql_query +";" + post_next_sql
         try:
             parsed = sqlglot.parse_one(sql_query, read = 'sqlite')
             # If no exception: SQL is valid!
@@ -182,9 +154,9 @@ def test_for_fail(sql_query: str, test_script: Path,
             print(f"Ignoring TokenError on: {e}")
         except ParseError as e:
             print(f"Invalid SQL detected: {sql_query} -- {e}")
-            return 1  # or whatever you normally do
+            #return 1  # or whatever you normally do
     else:
-        curr_query = pre_next_sql + sql_query +";" + post_next_sql
+        curr_query = pre_next_sql+";" + sql_query +";" + post_next_sql
         try:
             parsed = sqlglot.parse_one(sql_query, read = 'sqlite')
             # If no exception: SQL is valid!
@@ -195,9 +167,7 @@ def test_for_fail(sql_query: str, test_script: Path,
             print(f"Ignoring TokenError on: {e}")
         except ParseError as e:
             print(f"Invalid SQL detected: {sql_query} -- {e}")
-            return 1  # or whatever you normally do
-    #print(" TRY :")
-    #print(curr_query)
+            #return 1  # or whatever you normally do
 
     try:
         with tempfile.NamedTemporaryFile(mode="w+", suffix=".sql", delete=False) as tmp_file:
