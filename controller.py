@@ -67,4 +67,5 @@ with open(query_path, "w", encoding="utf-8") as f:
     f.write(content)
     env = os.environ.copy()
     env["TEST_CASE_LOCATION"] = str(query_path)
+    os.environ.update(env)
 

@@ -42,6 +42,7 @@ COPY remove_select_args.py .
 COPY replace_nth_bracket_expression_random.py .
 COPY remove_redundant.py .
 COPY remove_with_args.py .
+COPY calc_quality_reduction.py .
 
 # make all script files runnable
 RUN sudo chmod -R +x scripts
@@ -55,6 +56,7 @@ RUN sudo chmod +x remove_where_args.py
 RUN sudo chmod +x remove_select_args.py
 RUN sudo chmod +x replace_nth_bracket_expression_random.py
 RUN sudo chmod +x remove_redundant.py
+RUN sudo chmod +x calc_quality_reduction.py
 
 # Set the default command (you can change this based on your testing)
 CMD ["/bin/bash" ]
