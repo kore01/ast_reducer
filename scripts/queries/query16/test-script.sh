@@ -14,22 +14,19 @@ version="3.26.0"
 output_new=$(sqlite3-"$version" < "$QUERY" 2>&1)
 exit_code_new=$?
 
-echo "[DEBUG $version ]"
-echo "exit_code_new=$exit_code_new"
-echo "EXPECTED_exit_code=$EXPECTED_exit_code"
-echo "EXPECTED=$EXPECTED"
-echo "output_new=$output_new"
+#echo "$QUERY"
+#echo "exit_code_new=$exit_code_new"
+#echo "EXPECTED_exit_code=$EXPECTED_exit_code"
+#echo "EXPECTED=$EXPECTED"
+#echo "output_new=$output_new"
 
 #output_new_original=$(sqlite3-"$version" < "$ORIGINAL" 2>&1)
 #echo "output_new_original=$output_new_original"
 
 # Explanation of the if clauses:
 #1: if the exit codes are not equal than it is not the same crash (this should probably be enough tbf)
-#2: if not the second one just checks if the output is the same (or not)
 if [[ "$exit_code_new" -ne "$EXPECTED_exit_code" ]]; then
     exit 1
-#elif [[ "$output_new" != *"$EXPECTED"* ]]; then
-#    exit 1
 else
 	echo "We still have a failure (CRASH)!"
     exit 0
