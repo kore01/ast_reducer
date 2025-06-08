@@ -105,7 +105,6 @@ def reduce_where(curr_sql_line:str, test_script: Path,
     if len(curr_sql_line) == 0:
         return curr_sql_line
 
-    print("REDUCE WHERE")    
     curr_removed = remove_where_args(curr_sql_line, -1)
     if curr_removed == "": return curr_sql_line
     if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
@@ -118,7 +117,6 @@ def reduce_where(curr_sql_line:str, test_script: Path,
         #if it doesnt fail, then 
         if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
             curr_sql_line = curr_removed
-            print("BIG SUCCESS")
         else: i+=1
     
     return curr_sql_line  
@@ -140,9 +138,6 @@ def reduce_select(curr_sql_line:str, test_script: Path,
             continue
         #if it doesnt fail, then 
         if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
-            print("LARGE SUCCESS")
-            print("from " + curr_sql_line)
-            print("to   " + curr_removed)
             
             curr_sql_line = curr_removed
             
@@ -159,7 +154,6 @@ def reduce_in_brackets(curr_sql_line: str, test_script: Path,
     if len(curr_sql_line) == 0:
         return curr_sql_line
 
-    print("REDUCE SELECT")    
     i = 0
     while True:
         try:
@@ -178,7 +172,6 @@ def reduce_in_brackets(curr_sql_line: str, test_script: Path,
         # If the test passes (returns 0), accept the reduction
         if test_for_fail(curr_removed, test_script, pre_next_sql, post_next_sql, expected1, expected2) == 0:
             curr_sql_line = curr_removed
-            print("EXTREME SUCCESS")
         else:
             i += 1
 

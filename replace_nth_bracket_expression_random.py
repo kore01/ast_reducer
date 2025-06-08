@@ -24,31 +24,13 @@ def sql_to_python_expr(expr: str) -> str:
     return expr
 
 def safe_eval(expr: str):
-    """
-    Safely evaluate a Python expression converted from SQL.
-    Only allows basic arithmetic and logical operations.
-    """
-    # Allowed builtins (empty)
-    allowed_builtins = {}
-
-    # Allowed globals - none
     allowed_globals = {"__builtins__": None}
-
-    # Allowed locals - empty
-    allowed_locals = {}
-
     try:
-        return eval(expr, allowed_globals, allowed_locals)
+        return eval(expr, allowed_globals, {})
     except Exception:
         return None
 
 def replace_nth_bracket_expression_random(sql: str, index: int) -> str:
-    """
-    Replace the n-th bracketed expression in the SQL string with a simplified value:
-    - If the expression inside the parentheses is arithmetic or logical, evaluate it.
-    - Otherwise, randomly choose one of the comma-separated inner values.
-    Remove the parentheses in either case.
-    """
     positions = []
     stack = []
 
@@ -68,13 +50,11 @@ def replace_nth_bracket_expression_random(sql: str, index: int) -> str:
     original_expr = sql[start:end]
 
     inner = original_expr[1:-1].strip()
-    
-    # Try to evaluate the whole inner expression as arithmetic/logical
+
     python_expr = sql_to_python_expr(inner)
     result = safe_eval(python_expr)
-    
+
     if result is not None:
-        # Convert result back to SQL representation for booleans and None
         if result is True:
             new_expr = 'TRUE'
         elif result is False:
@@ -84,14 +64,17 @@ def replace_nth_bracket_expression_random(sql: str, index: int) -> str:
         else:
             new_expr = str(result)
     else:
-        # Fallback: split by commas (not inside nested parens)
         inner_parts = [x.strip() for x in re.split(r',(?![^()]*\))', inner)]
         if not inner_parts:
             return sql
         new_expr = random.choice(inner_parts)
 
+    # 10% chance to replace with TRUE or FALSE randomly
+    if random.random() < 0.1:
+        new_expr = random.choice(['TRUE', 'FALSE'])
+
     return sql[:start] + new_expr + sql[end:]
 
-# Example test
+# Test
 sql = "INSERT INTO V SELECT* FROM( VALUES(( NULL), false),( NULL, NULL)) WHERE(( false< true)>( NOT true));"
-print(replace_nth_bracket_expression_random(sql, 4))  # Should try to evaluate (( NULL), false) or pick random
+print(replace_nth_bracket_expression_random(sql, 4))

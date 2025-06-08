@@ -173,7 +173,7 @@ def test_for_fail(sql_query: str, test_script: Path,
     elif(sql_query.endswith(";")):
         curr_query = pre_next_sql + sql_query + post_next_sql
         try:
-            parsed = sqlglot.parse_one(sql_query, read = 'sqlite3')
+            parsed = sqlglot.parse_one(sql_query, read = 'sqlite')
             # If no exception: SQL is valid!
         except AttributeError as e:
             print(f"Ignoring AttributeError on: {e}")
@@ -186,7 +186,7 @@ def test_for_fail(sql_query: str, test_script: Path,
     else:
         curr_query = pre_next_sql + sql_query +";" + post_next_sql
         try:
-            parsed = sqlglot.parse_one(sql_query, read = 'sqlite3')
+            parsed = sqlglot.parse_one(sql_query, read = 'sqlite')
             # If no exception: SQL is valid!
         except AttributeError as e:
             print(f"Ignoring AttributeError on: {e}")
