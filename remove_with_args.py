@@ -57,6 +57,6 @@ def remove_with_args(sql: str, index: int) -> str:
     #print(expression.sql(pretty=True, dialect='sqlite').replace("SELECT *", "SELECT*"))
     return output
 
-sql = 'WITH temp AS (SELECT a, b, c FROM t) SELECT x, y, z FROM main;'
-print(remove_with_args(sql, 1))
+#sql = 'WITH temp AS (SELECT a, b, c FROM t) SELECT x, y, z FROM main;'
+#print(remove_with_args(sql, 1))
 
