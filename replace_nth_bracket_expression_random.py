@@ -75,5 +75,5 @@ def replace_nth_bracket_expression_random(sql: str, index: int) -> str:
     return sql[:start] + new_expr + sql[end:], sql[:start] + ' TRUE ' + sql[end:], sql[:start] + ' FALSE ' + sql[end:]
 
 # Test
-sql = "INSERT INTO F SELECT* FROM( VALUES( True, False),( NULL, TRUE)) WHERE((( 110/( 150))=- 0)=( false<>( 66<> 8)));"
-print(replace_nth_bracket_expression_random(sql, 5))
+#sql = "INSERT INTO F SELECT* FROM( VALUES( True, False),( NULL, TRUE)) WHERE((( 110/( 150))=- 0)=( false<>( 66<> 8)));"
+#print(replace_nth_bracket_expression_random(sql, 5))
