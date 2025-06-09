@@ -41,7 +41,7 @@ def delta_reduce_single_statements(sql_queries_dir: Path, test_script: Path) -> 
         else:
             post_next_sql = new_sql + ";\n" + post_next_sql
             new_sql = new_sql + ";\n"
-        if not post_next_sql.endswith(";"):
+        if not post_next_sql.strip().endswith(";"):
             post_next_sql = post_next_sql + ";"
 
         curr_path.write_text(new_sql)
@@ -110,11 +110,11 @@ def comps_of_split(parts: List[str]) -> List[str]:
 @lru_cache(maxsize=14124)
 def test_for_fail(sql_query: str, test_script: Path, pre_next_sql: str, post_next_sql: str) -> int:
     if(sql_query == ""):
-        curr_query = pre_next_sql +";" + post_next_sql
-    elif(sql_query.endswith(";")):
-        curr_query = pre_next_sql+";" + sql_query +";" + post_next_sql
+        curr_query = pre_next_sql + post_next_sql
+    elif(sql_query.strip().endswith(";")):
+        curr_query = pre_next_sql + sql_query + post_next_sql
     else:
-        curr_query = pre_next_sql+";" + sql_query +";" + post_next_sql
+        curr_query = pre_next_sql + sql_query + ";" + post_next_sql
        
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
