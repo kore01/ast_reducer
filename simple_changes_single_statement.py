@@ -47,7 +47,7 @@ def simple_changes_single_statement(sql_queries_dir: Path, test_script: Path) ->
         if test_for_fail("", test_script, pre_next_sql, post_next_sql) == 0:
             new_sql = ""
             post_next_sql = new_sql + post_next_sql
-            if not post_next_sql.endswith(";"):
+            if not post_next_sql.strip().endswith(";"):
                 post_next_sql = post_next_sql + ";"
                 
             if os.path.isfile(curr_path):
@@ -79,7 +79,7 @@ def simple_changes_single_statement(sql_queries_dir: Path, test_script: Path) ->
             else:
                 post_next_sql = new_sql + ";\n" + post_next_sql
                 new_sql = new_sql + ";\n"
-            if not post_next_sql.endswith(";"):
+            if not post_next_sql.strip().endswith(";"):
                 post_next_sql = post_next_sql + ";"
             curr_path.write_text(new_sql)
 
