@@ -12,7 +12,7 @@ from remove_redundant import remove_redundant
 #take the OG path and change it to a copy
 query_path = os.path.realpath(sys.argv[1])
 
-dest_path = os.path.join(os.path.dirname(query_path), "result_query.sql")
+dest_path = os.path.join(os.path.dirname(query_path), "query.sql")
 shutil.copyfile(query_path, dest_path)
 
 query_path = dest_path
